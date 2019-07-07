@@ -39,7 +39,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.listDatas)
   },
   methods: {
     // 控制面板的收起和展开
