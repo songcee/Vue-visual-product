@@ -2,8 +2,11 @@
   <div class="header-container" :class="{expand}">
     <div class="block-body">
       <div class="tool-banner">
-        <button type="button" class="vp-btn">新建项目</button>
-        <button type="button" class="vp-btn">预览</button>
+        <button type="button" class="vp-btn vp-btn-red" v-if="isNewProduct" @click="productEdit()">新建项目</button>
+        <button type="button" class="vp-btn" v-else @click="productEdit()">编辑项目</button>
+        <button type="button" class="vp-btn">布局划分</button>
+        <button type="button" class="vp-btn">预览页面</button>
+        <button type="button" class="vp-btn">版本管理</button>
       </div>
     </div>
     <div class="handler handler-header" @click="toggleHandler()"></div>
@@ -15,16 +18,40 @@ export default {
   name: 'Header',
   created: function () {
     // 监听事件
-    this.$util.bus.$on('expend_toggle_all', (val) => {
-      this.toggleHandler(val)
-    })
+    // this.$util.bus.$on('expend_toggle_all', (val) => {
+    //   this.toggleHandler(val)
+    // })
   },
   data () {
     return {
-      expand: true
+      expand: true,
+      isNewProduct: true
+    }
+  },
+  computed: {
+    handlerExpend () {
+      return this.$store.state.handler.allExpend;
+    },
+    productName () {
+      return this.$store.state.product.name;
+    }
+  },
+  watch: {
+    handlerExpend (val) {
+      this.toggleHandler(val)
+    },
+    productName (val) {
+      if (val !== '') { // 如果有项目名，则说明不是新建的项目了
+        this.isNewProduct = false
+      }
     }
   },
   methods: {
+    // 新建、编辑项目
+    productEdit () {
+      this.$store.commit('layout_show')
+      this.$store.commit('popup_topmask_handler', true)
+    },
     // 控制面板的收起和展开
     toggleHandler (type) {
       if (type === undefined) {
@@ -49,7 +76,7 @@ export default {
   line-height: 49px;
   margin-top: -49px;
   border-bottom: 1px solid #ddd;
-  z-index: 2500;
+  z-index: 300;
   background: #fff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.1);
   transition: all .5s ease-in .1s;
@@ -63,7 +90,7 @@ export default {
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 100;
+  z-index: 300;
   background: #fff;
 }
 .handler-header {

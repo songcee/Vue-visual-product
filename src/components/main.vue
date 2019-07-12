@@ -1,10 +1,13 @@
 <template>
   <div class="edit-container">
-      <Header></Header>
-      <List></List>
-      <Board></Board>
-      <Option></Option>
-      <Footer></Footer>
+      <Header></Header> <!-- z-index: 300 -->
+      <List></List> <!-- z-index: 200 -->
+      <Board></Board> <!-- z-index: 100 -->
+      <Option></Option> <!-- z-index: 200 -->
+      <Footer></Footer> <!-- z-index: 300 -->
+      <div v-show="showTopmask" class="top-mask"></div> <!-- z-index: 400 -->
+      <div v-show="showMidmask" class="mid-mask"></div> <!-- z-index: 200 -->
+      <Layout :show="showLayout"></Layout> <!-- z-index: 500 -->
   </div>
 </template>
 
@@ -14,6 +17,9 @@ import List from '@/components/framework/list'
 import Board from '@/components/framework/board'
 import Option from '@/components/framework/option'
 import Footer from '@/components/framework/footer'
+import Layout from '@/components/framework/popup/layout'
+// import WindowBorder from '@/lib/windowBorder'
+
 export default {
   name: 'Main',
   components: {
@@ -21,7 +27,20 @@ export default {
       List,
       Board,
       Option,
-      Footer
+      Footer,
+      Layout,
+      // WindowBorder
+  },
+  computed: {
+    showLayout () {
+      return this.$store.state.layout.show
+    },
+    showTopmask () {
+      return this.$store.state.popup.topmask
+    },
+    showMidmask () {
+      return this.$store.state.popup.midmask
+    }
   }
 }
 </script>
@@ -46,5 +65,18 @@ export default {
 }
 .handler:hover {
   background: #dddddd;
+}
+.top-mask, .mid-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: .5;
+  z-index: 400;
+}
+.mid-mask {
+  z-index: 200;
 }
 </style>

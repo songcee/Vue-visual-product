@@ -17,9 +17,9 @@ export default {
   name: 'Option',
   created: function () {
     // 监听事件
-    this.$util.bus.$on('expend_toggle_all', (val) => {
-      this.toggleHandler(val)
-    })
+    // this.$util.bus.$on('expend_toggle_all', (val) => {
+    //   this.toggleHandler(val)
+    // })
     this.$util.bus.$on('show_module_desc', (index) => {
       this.showModuleDesc(index)
     })
@@ -34,6 +34,16 @@ export default {
       index: -1,
       showDesc: false,
       showOption: false
+    }
+  },
+  computed: {
+    handlerExpend() {
+      return this.$store.state.handler.allExpend;
+    }
+  },
+  watch: {
+    handlerExpend (val) {
+      this.toggleHandler(val)
     }
   },
   methods: {
@@ -71,7 +81,7 @@ export default {
   width: 300px;
   margin-right: -300px;
   border-left: 1px solid #ddd;
-  z-index: 2000;
+  z-index: 200;
   background: #fff;
   box-shadow: 0 0 2px 2px rgba(0,0,0,.1);
   transition: all .5s ease-in .1s;
@@ -86,7 +96,7 @@ export default {
   top: 0;
   bottom: 0;
   padding-top: 50px;
-  z-index: 100;
+  z-index: 200;
   background: #fff;
 }
 .handler-option {

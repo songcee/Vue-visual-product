@@ -11,7 +11,7 @@
           @mouseleave="toggleItemHandler(index, false)"
         >
           <p class="list-item-text">{{item.title.text}}</p>
-          <div class="list-item-handle" :class="{show: item.handler, hide: !item.handler}">
+          <div class="list-item-handle" :class="[item.handler?'show':'hide']">
             <span class="list-item-desc" @click="descItem(index)">查看</span>
             <span class="list-item-add" @click="addItem(index)">添加</span>
           </div>
@@ -28,9 +28,9 @@ export default {
   name: 'List',
   created () {
     // 监听事件
-    this.$util.bus.$on('expend_toggle_all', (val) => {
-      this.toggleHandler(val)
-    })
+    // this.$util.bus.$on('expend_toggle_all', (val) => {
+    //   this.toggleHandler(val)
+    // })
   },
   data () {
     return {
@@ -40,7 +40,25 @@ export default {
   },
   mounted () {
   },
+  computed: {
+    handlerExpend() {
+      return this.$store.state.handler.allExpend;
+    }
+  },
+  watch: {
+    handlerExpend (val) {
+      this.toggleHandler(val)
+    }
+  },
   methods: {
+    // 查看组件介绍
+    descItem (index) {
+      this.$util.bus.$emit('show_module_desc', index)
+    },
+    // 添加组件
+    addItem (index) {
+      this.$util.bus.$emit('show_module_option', index)
+    },
     // 控制面板的收起和展开
     toggleHandler (type) {
       if (type === undefined) {
@@ -52,14 +70,6 @@ export default {
     // 组件控制按钮的收起和展开
     toggleItemHandler (index, type) {
       this.$set(this.listDatas[index], 'handler', type)
-    },
-    // 查看组件介绍
-    descItem (index) {
-      this.$util.bus.$emit('show_module_desc', index)
-    },
-    // 添加组件
-    addItem (index) {
-      this.$util.bus.$emit('show_module_option', index)
     }
   }
 }
@@ -75,7 +85,7 @@ export default {
   width: 300px;
   margin-left: -300px;
   border-right: 1px solid #ddd;
-  z-index: 2000;
+  z-index: 200;
   background: #fff;
   box-shadow: 2px 0 2px 0 rgba(0,0,0,.1);
   transition: all .5s ease-in .1s;
@@ -91,7 +101,7 @@ export default {
   top: 0;
   bottom: 0;
   padding-top: 50px;
-  z-index: 100;
+  z-index: 200;
   background: #fff;
 }
 .handler-list {

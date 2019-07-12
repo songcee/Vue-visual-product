@@ -37,3 +37,13 @@
   background-color: #57a3f3;
   border-color: #57a3f3;
 }
+.vp-btn-red {
+  color: #fff;
+  background-color: #F56C6C;
+  border-color: #F56C6C;
+}
+.vp-btn-red:hover {
+  color: #fff;
+  background-color: #f78989;
+  border-color: #f78989;
+}

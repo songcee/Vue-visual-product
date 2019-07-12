@@ -24,7 +24,7 @@ html, body {
   margin: 0;
   padding: 0;
 }
-input, button {
+input, button, select {
   outline: none;
 }
 #app {

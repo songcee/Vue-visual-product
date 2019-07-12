@@ -12,8 +12,9 @@ const config = {
       {
         type: 'text', // 数据类型（text-纯文本 select-下拉列表 ）
         text: '初始化股票代码', // 显示的选项名称
-        default: '300033', // 默认填充的文本
-        validation: '/^\d{6}$/' // 校验输入内容的正则或者function(val){}
+        default: '', // 默认填充的文本
+        validation: '/^\d{6}$/', // 校验输入内容的正则或者function(val){}
+        mustRequired: false // 是否必填
       },
       {
         type: 'select', // 数据类型
@@ -27,20 +28,23 @@ const config = {
             value: 'k-line'
           }
         ],
-        default: 'share-line'
+        default: 'share-line',
+        mustRequired: false // 是否必填
       },
       {
         type: 'text', // 数据类型（text-纯文本 select-下拉列表 ）
         text: '背景颜色', // 显示的选项名称
-        default: '300033', // 默认填充的文本
+        default: '#fff', // 默认填充的文本
         validation: function (val) { // 校验输入内容的正则或者function(val){}
           let result = false
           try {
             result = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(val)
           } catch (e) {
+            window.console.log(e)
           }
           return result
-        }
+        },
+        mustRequired: true // 是否必填
       }
     ]
   },
@@ -48,7 +52,8 @@ const config = {
     {
       name: 'code', // 接收数据的字段名
       default: '', // 默认值，即接收值检验出错时使用
-      validation: '/^\d{6}$/' // 接收值校验，规则同上方配置项中的数据校验
+      validation: '/^\d{6}$/', // 接收值校验，规则同上方配置项中的数据校验
+      description: '股票代码' // 介绍说明
     }
   ],
   outData: [ // 输出数据
@@ -61,7 +66,8 @@ const config = {
   inFunc: [ // 接收的方法，即可调用外部的方法
     {
       name: 'changeCode', // 方法名
-      params: ['code'] // 方法的参数名
+      params: ['code'], // 方法的参数名
+      description: '修改股票代码的时候调动的方法' // 介绍说明
     }
   ],
   outFunc: [ // 输出的方法，即用于定义外部的方法

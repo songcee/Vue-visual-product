@@ -1,4 +1,5 @@
-function mergeObject (source, target) {
+const fun = {
+  mergeObject (source, target) {
     // 合并对象，遇到对象则合并，其他覆盖
     let handler = function (source, target) {
       let keys = Object.keys(source)
@@ -26,8 +27,19 @@ function mergeObject (source, target) {
       return source
     }
     return handler(source, target)
+  },
+
+  // 将obj2中的值更新到对应的obj1上
+  objAssign (obj1, obj2) {
+    if (!obj1 || !obj2) return
+    for (let i in obj2) {
+      if (obj1.hasOwnProperty(i) && typeof obj1[i] != 'object') {
+        obj1[i] = obj2[i]
+      } else {
+        this.objAssign(obj1[i], obj2[i])
+      }
+    }
   }
+}
   
-  export default {
-    mergeObject
-  }
+  export default fun

@@ -12,13 +12,23 @@ export default {
   name: 'Footer',
   created: function () {
     // 监听事件
-    this.$util.bus.$on('expend_toggle_all', (val) => {
-      this.toggleHandler(val)
-    })
+    // this.$util.bus.$on('expend_toggle_all', (val) => {
+    //   this.toggleHandler(val)
+    // })
   },
   data () {
     return {
       expand: true
+    }
+  },
+  computed: {
+    handlerExpend() {
+      return this.$store.state.handler.allExpend;
+    }
+  },
+  watch: {
+    handlerExpend (val) {
+      this.toggleHandler(val)
     }
   },
   methods: {
@@ -46,7 +56,7 @@ export default {
   line-height: 49px;
   margin-bottom: -49px;
   border-top: 1px solid #ddd;
-  z-index: 2500;
+  z-index: 300;
   background: #fff;
   box-shadow: 0 -2px 2px 0 rgba(0,0,0,.1);
   transition: all .5s ease-in .1s;
@@ -60,7 +70,7 @@ export default {
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 100;
+  z-index: 300;
   background: #fff;
   text-align: center;
 }
