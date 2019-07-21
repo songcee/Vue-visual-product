@@ -8,6 +8,7 @@
       <div v-show="showTopmask" class="top-mask"></div> <!-- z-index: 400 -->
       <div v-show="showMidmask" class="mid-mask"></div> <!-- z-index: 200 -->
       <Layout :show="showLayout"></Layout> <!-- z-index: 500 -->
+      <Module :show="showModule"></Module> <!-- z-index: 500 -->
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import Board from '@/components/framework/board'
 import Option from '@/components/framework/option'
 import Footer from '@/components/framework/footer'
 import Layout from '@/components/framework/popup/layout'
+import Module from '@/components/framework/popup/module'
 // import WindowBorder from '@/lib/windowBorder'
 
 export default {
@@ -29,11 +31,15 @@ export default {
       Option,
       Footer,
       Layout,
+      Module,
       // WindowBorder
   },
   computed: {
     showLayout () {
       return this.$store.state.layout.show
+    },
+    showModule () {
+      return this.$store.state.module.show
     },
     showTopmask () {
       return this.$store.state.popup.topmask

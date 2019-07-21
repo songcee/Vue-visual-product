@@ -1,9 +1,7 @@
+<!-- 设置页面布局的弹窗 -->
 <template>
-  <div class="layout-container" ref="winDom" v-show="show" :style="{left: winLeft, top: winTop, transform: winTrans}">
-    <div class="header"
-     ref="winHead"
-     :style="{cursor: moveFlag?'move':'default'}"
-     onselectstart="return false">
+  <div class="popup-container" v-show="show">
+    <div class="header">
       <span class="header-title">编辑项目信息</span>
       <span class="header-close" @click="cancelWin()">╳</span>
     </div>
@@ -27,15 +25,15 @@
           <label class="item-label requierd">页面宽度自适应：</label>
           <div class="item-content">
             <select v-model="product.width_adaption" :class="{'warning-border': error.width_adaption}" @blur="check('width_adaption', product.width_adaption)">
-              <option value="1">中间固定宽度，两边背景色自适应宽度填充</option>
-              <option value="2">中间固定最小宽度，两边背景色固定宽度填充</option>
+              <option value="1">宽度铺满全屏，仅设置最小宽度</option>
+              <option value="2">中间固定宽度，两边背景色自适应宽度填充</option>
               <option value="3">中间固定最大、最小宽度，两边背景色自适应宽度填充</option>
             </select>
           </div>
         </div>
         <div class="item">
-          <div class="item-adaption-desc" v-if="product.width_adaption == 1">宽度自适应详细说明：<br/>中间主体内容部分固定宽度<input v-model="product.adaption.fixWidth" :class="{'warning-border': error.fixWidth}" @blur="check('fixWidth', product.adaption.fixWidth)" />px，两边用背景色填充；</div>
-          <div class="item-adaption-desc" v-if="product.width_adaption == 2">宽度自适应详细说明：<br/>中间主体内容部分最小宽度<input v-model="product.adaption.minWidth" :class="{'warning-border': error.minWidth}" @blur="check('minWidth', product.adaption.minWidth)" />px，两边用背景色填充的宽最大为<input v-model="product.adaption.fixSide" :class="{'warning-border': error.fixSide}" @blur="check('fixSide', product.adaption.fixSide)" />px；</div>
+          <div class="item-adaption-desc" v-if="product.width_adaption == 1">宽度自适应详细说明：<br/>中间主体内容部分铺满全屏，且设置最小宽度为<input v-model="product.adaption.minWidth" :class="{'warning-border': error.minWidth}" @blur="check('minWidth', product.adaption.minWidth)" />px</div>
+          <div class="item-adaption-desc" v-if="product.width_adaption == 2">宽度自适应详细说明：<br/>中间主体内容部分固定宽度<input v-model="product.adaption.fixWidth" :class="{'warning-border': error.fixWidth}" @blur="check('fixWidth', product.adaption.fixWidth)" />px，两边用背景色填充；</div>
           <div class="item-adaption-desc" v-if="product.width_adaption == 3">宽度自适应详细说明：<br/>中间主体内容部分最小宽度<input v-model="product.adaption.minWidth" :class="{'warning-border': error.minWidth}" @blur="check('minWidth', product.adaption.minWidth)" />px，最大宽度<input v-model="product.adaption.maxWidth" :class="{'warning-border': error.maxWidth}" @blur="check('maxWidth', product.adaption.maxWidth)" />px，剩余部分用背景色填充；</div>
         </div>
         <div class="item">
@@ -43,13 +41,15 @@
           <div class="item-content">
             <select v-model="product.height_adaption" :class="{'warning-border': error.height_adaption}" @blur="check('height_adaption', product.height_adaption)">
               <option value="1">固定高度</option>
-              <option value="2">浏览器100%高度加最小高度控制</option>
+              <option value="2">浏览器100%高度，且设置最小高度</option>
+              <option value="3">不设置页面高度，由内部元素撑开</option>
             </select>
           </div>
         </div>
         <div class="item">
           <div class="item-adaption-desc" v-if="product.height_adaption == 1">高度自适应详细说明：<br/>页面高度固定为<input v-model="product.adaption.fixHeight" :class="{'warning-border': error.fixHeight}" @blur="check('fixHeight', product.adaption.fixHeight)" />px；</div>
           <div class="item-adaption-desc" v-if="product.height_adaption == 2">高度自适应详细说明：<br/>页面最小高度为<input v-model="product.adaption.minHeight" :class="{'warning-border': error.minHeight}" @blur="check('minHeight', product.adaption.minHeight)" />px，大于这个值时为浏览器100%高度；</div>
+          <div class="item-adaption-desc" v-if="product.height_adaption == 2">高度自适应详细说明：<br/>不设置页面的高度，由内部元素撑开</div>
         </div>
       </div>
       <div class="module-footer">
@@ -66,14 +66,6 @@ export default {
   props: ['show'],
   data () {
     return {
-      winLeft: '50%',
-      winTop: '50%',
-      winTrans: 'translate(-50%, -50%)',
-      moveFlag: false,
-      disX: 0, // 拖动时，记录起始鼠标按下位置
-      disY: 0, // 拖动时，记录起始鼠标按下位置
-      posX: 0, // 拖动时，记录鼠标按下时窗口位置
-      posY: 0, // 拖动时，记录鼠标按下时窗口位置
       // 项目基础信息（只是临时储存，最终会存入store）
       product: {
         name: '', // 项目名称
@@ -84,7 +76,6 @@ export default {
           minWidth: 1000, // 最小宽度
           maxWidth: 1920, // 最大宽度
           fixWidth: 1000, // 固定宽度
-          fixSide: 300, // 两边填充部分宽度
           minHeight: 600, // 最小高度
           fixHeight: 800, // 固定高度
         },
@@ -97,7 +88,6 @@ export default {
         minWidth: false,
         maxWidth: false,
         fixWidth: false,
-        fixSide: false,
         minHeight: false,
         fixHeight: false
       },
@@ -122,7 +112,7 @@ export default {
     // 每次显示编辑项目弹窗前，先从store中获取最新数据
     fixProduct () {
       const info = this.$store.getters.getAllProductInfo
-      this.$util.objAssign(this.product, info)
+      this.$util.objAssign(this.product, info.layout)
     },
     // 校验数据格式是否正确
     check (type, data, valid) { // type-数据名 data-数据的值 valid-校验规则
@@ -138,26 +128,30 @@ export default {
         }
         return
       }
+      if (data == '') {
+        this.error[type] = true
+        return
+      }
+      let validReg
       switch (type) {
         case 'bgcolor':
-          valid = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/
+          validReg = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/
           break
         case 'name':
         case 'width_adaption':
         case 'height_adaption':
-          valid = /\S/
+          validReg = /\S/
           break
         case 'minWidth':
         case 'maxWidth':
         case 'fixWidth':
-        case 'fixSide':
         case 'minHeight':
         case 'fixHeight':
-          valid = /^[0-9]*$/
+          validReg = /^[0-9]*$/
           break
       }
-      if (!valid.test(data)) {
-        this.error[type] = true
+      if (!validReg.test(data)) {
+        this.error[type] = true // 提示报错
       } else {
         this.error[type] = false
       }
@@ -184,25 +178,27 @@ export default {
         alert('请输入所有必填内容！')
         return
       }
-      this.$store.commit('product_set', this.product)
-      this.updateBoard()
-      this.$store.commit('layout_hide')
-      this.$store.commit('popup_topmask_handler', false)
+      // 校验所有输入内容是否正确结束
+      this.$store.commit('product_set', {type: 'layout', obj: this.product}) // 将布局的参数存入store
+      this.updateLayout() // 更新画板上的页面布局
+      this.$store.commit('layout_hide') // 隐藏页面布局设置窗口
+      this.$store.commit('popup_topmask_handler', false) // 隐藏遮罩层
     },
     cancelWin () {
-      this.$store.commit('layout_hide')
-      this.$store.commit('popup_topmask_handler', false)
+      this.$store.commit('layout_hide') // 隐藏页面布局设置窗口
+      this.$store.commit('popup_topmask_handler', false) // 隐藏遮罩层
+      // 这里关闭窗口时不需要恢复数据，因为每次打开窗口都会从store中自动读取一遍数据
       this.resetError()
     },
-    // 将error内容回复初始化
+    // 将所有输入框的错误提示内容恢复初始化
     resetError () {
       for (let i in this.error) {
         this.error[i] = false
       }
     },
     // 修改画板
-    updateBoard () {
-      this.$util.bus.$emit('board_updateBoard', this.product)
+    updateLayout () {
+      this.$util.bus.$emit('board_updateLayout', this.product)
     },
   }
 }
@@ -210,13 +206,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.layout-container {
+.popup-container {
   position: absolute;
   background: #fff;
   z-index: 500;
   border-radius: 10px;
   border: 1px solid #ddd;
   box-shadow: 0 0 4px 4px rgba(0,0,0,.1);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .header {
   height: 39px;
@@ -246,6 +245,8 @@ export default {
   height: 30px;
   line-height: 30px;
   border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+  font-size: 14px;
 }
 .module {
   width: 520px;

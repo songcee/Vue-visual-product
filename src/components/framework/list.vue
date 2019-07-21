@@ -1,3 +1,4 @@
+<!-- 左侧功能列表模块 -->
 <template>
   <div class="list-container" :class="{expand}">
     <div class="block-body">

@@ -1,3 +1,4 @@
+<!-- 右侧功能配置项模块 -->
 <template>
   <div class="option-container" :class="{expand}">
     <div class="block-body">

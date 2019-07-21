@@ -1,10 +1,11 @@
+<!-- 顶部模块 -->
 <template>
   <div class="header-container" :class="{expand}">
     <div class="block-body">
       <div class="tool-banner">
         <button type="button" class="vp-btn vp-btn-red" v-if="isNewProduct" @click="productEdit()">新建项目</button>
         <button type="button" class="vp-btn" v-else @click="productEdit()">编辑项目</button>
-        <button type="button" class="vp-btn">布局划分</button>
+        <button type="button" class="vp-btn" @click="moduleEdit()">模块划分</button>
         <button type="button" class="vp-btn">预览页面</button>
         <button type="button" class="vp-btn">版本管理</button>
       </div>
@@ -33,7 +34,7 @@ export default {
       return this.$store.state.handler.allExpend;
     },
     productName () {
-      return this.$store.state.product.name;
+      return this.$store.state.product.layout.name;
     }
   },
   watch: {
@@ -50,6 +51,15 @@ export default {
     // 新建、编辑项目
     productEdit () {
       this.$store.commit('layout_show')
+      this.$store.commit('popup_topmask_handler', true)
+    },
+    // 编辑模块划分
+    moduleEdit () {
+      if (!this.productName) {
+        alert('请先创建项目！')
+        return
+      }
+      this.$store.commit('module_show')
       this.$store.commit('popup_topmask_handler', true)
     },
     // 控制面板的收起和展开

@@ -1,3 +1,4 @@
+<!-- 底部模块 -->
 <template>
   <div class="footer-container" :class="{expand}">
     <div class="block-body">
