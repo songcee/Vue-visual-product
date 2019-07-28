@@ -8,13 +8,14 @@
           v-for="(item, index) in listDatas"
           :key="item.title.text"
           :title="item.title.text"
+          @click="optionItem(index)"
           @mouseenter="toggleItemHandler(index, true)"
           @mouseleave="toggleItemHandler(index, false)"
         >
           <p class="list-item-text">{{item.title.text}}</p>
           <div class="list-item-handle" :class="[item.handler?'show':'hide']">
-            <span class="list-item-desc" @click="descItem(index)">查看</span>
-            <span class="list-item-add" @click="addItem(index)">添加</span>
+            <span class="list-item-desc" @click.stop="descItem(index)">查看</span>
+            <span class="list-item-add" @click.stop="addItem(index)">添加</span>
           </div>
         </div>
       </div>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import listDatas from '@/components/resources'
+import listDatas from '@/components/resources/list'
 export default {
   name: 'List',
   created () {
@@ -36,12 +37,18 @@ export default {
   data () {
     return {
       expand: true,
-      listDatas: listDatas
+      listDatas: listDatas, // 组件列表数据
     }
   },
   mounted () {
   },
   computed: {
+    productName () {
+      return this.$store.state.product.layout.name
+    },
+    productModules () { // 项目模块的划分方式
+      return this.$store.state.product.modules.moduleIndex
+    },
     handlerExpend() {
       return this.$store.state.handler.allExpend;
     }
@@ -52,13 +59,28 @@ export default {
     }
   },
   methods: {
+    // 设置组件参数
+    optionItem (index) {
+      this.$util.bus.$emit('option_show_option', index)
+    },
     // 查看组件介绍
     descItem (index) {
-      this.$util.bus.$emit('show_module_desc', index)
+      console.log('查看', index, '组件')
+      this.$util.bus.$emit('option_show_desc', index)
     },
     // 添加组件
     addItem (index) {
-      this.$util.bus.$emit('show_module_option', index)
+      if (!this.productName) {
+        alert('请先创建项目！')
+        return
+      }
+      if (this.productModules == -1) {
+        alert('请先划分项目模块！')
+        return
+      }
+      // console.log('添加', index, '组件')
+      // this.$util.bus.$emit('board_add_item', index)
+      this.optionItem(index)
     },
     // 控制面板的收起和展开
     toggleHandler (type) {
@@ -101,7 +123,7 @@ export default {
   left: 0;
   top: 0;
   bottom: 0;
-  padding-top: 50px;
+  margin-top: 50px;
   z-index: 200;
   background: #fff;
 }

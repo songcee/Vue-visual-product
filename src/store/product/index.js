@@ -3,7 +3,7 @@
  **/
 const product = {
   state: {
-    layout: {
+    layout: { // 项目基础信息
       name: '', // 项目名称
       bgcolor: '#FFFFFF', // 项目背景色
       width_adaption: '', // 页面宽度自适应方式
@@ -16,23 +16,33 @@ const product = {
         fixHeight: 800, // 固定高度
       },
     },
-    modules: {
+    modules: { // 项目模块划分信息
       moduleIndex: -1, // 模块划分类型
-      input1: 0, // 下面是可能用到的4种参数
-      input2: 0,
-      input3: 0,
-      input4: 0
+      editIndex: -1, // 正在编辑的模块
+      input1: 100, // 下面是可能用到的4种参数
+      input2: 100,
+      input3: 100,
+      input4: 100
     },
+    components: {} // 项目每个模块中的组件
   },
   mutations: {
     // 设置项目基础数据
-    product_set (state, {type, obj}) {
+    product_set(state, { type, obj }) {
       for (let i in obj) {
         if (state[type].hasOwnProperty(i)) {
           state[type][i] = obj[i]
         }
       }
     },
+    // 设置项目正在编辑的模块
+    product_set_editIndex(state, index) {
+      state.modules.editIndex = index
+    },
+    // 设置项目模块的组件
+    product_set_components(state, { index, value }) {
+      state.components[index] = value
+    }
   },
   actions: {},
   getters: {

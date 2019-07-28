@@ -4,11 +4,13 @@ import store from '@/store'
 import util from '@/global/util'
 import Toast from 'vue-easy-toast'
 import Modules from '@/components/framework/modules'
+import Resources from '@/components/resources'
 
 Vue.config.productionTip = false
 Vue.prototype.$util = util
 Vue.use(Toast)
 Vue.use(Modules)
+Vue.use(Resources)
 
 window.alert = (text) => {
   Vue.toast(text, {

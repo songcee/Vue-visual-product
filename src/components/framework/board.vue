@@ -4,8 +4,8 @@
     <div class="block-body" @dblclick.stop.prevent="toggleExpand">
       <!-- product-canvas 就是项目的页面 -->
       <div class="product-canvas"
-      v-if="productName"
-       :style="{background: productBgcolor,
+        v-if="productName"
+        :style="{background: productBgcolor,
         width: productAdaption.defwidth || productAdaption.fixWidth,
         minWidth: productAdaption.minwidth,
         maxWidth: productAdaption.maxwidth,
@@ -13,10 +13,10 @@
         minHeight: productAdaption.minheight,
         }"
       >
-        <template v-if="productModules.moduleIndex">
+        <template v-if="productModule.moduleIndex">
           <component
-            :is="'Module'+productModules.moduleIndex"
-            :formate="productModules"
+            :is="'Module'+productModule.moduleIndex"
+            :formate="productModule"
           ></component>
         </template>
       </div>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import listDatas from '@/components/resources/list'
 export default {
   name: 'Board',
   created: function () {
@@ -35,17 +36,36 @@ export default {
     this.$util.bus.$on('board_updateModule', (data) => { // 更新页面模块划分
       this.updateModule(data)
     })
+    this.$util.bus.$on('board_add_item', (data) => { // 设置模块中的组件
+      console.log(this.productModules.editIndex, data)
+      if (this.productModules.editIndex == -1) {
+        alert('请先选择需要添加的模块！')
+        return
+      }
+      this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data.value})
+      console.log(this.$store.getters.getAllProductInfo)
+    })
+    this.$util.bus.$on('board_update_item', (data) => { // 更新模块中组件的数据配置
+      console.log(this.productModules.editIndex, data)
+      if (this.productModules.editIndex == -1) {
+        alert('请先选择需要添加的模块！')
+        return
+      }
+      this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data.value})
+      console.log(this.$store.getters.getAllProductInfo)
+    })
   },
   data () {
     return {
       allExpend: true, // 收起展开四周所有的面板
       productAdaption: {}, // 项目自适应方式
-      productModules: {}, // 页面模块划分
+      productModule: {}, // 页面模块划分
     }
   },
   computed: {
     productName () { return this.$store.state.product.layout.name },
     productBgcolor () { return this.$store.state.product.layout.bgcolor },
+    productModules () { return this.$store.state.product.modules }, // 页面模块划分
   },
   methods: {
     // 更新项目名称、背景色、自适应方式等信息
@@ -92,7 +112,7 @@ export default {
           obj.fixHeight = data.input1
           break
       }
-      this.productModules = obj
+      this.productModule = obj
     },
     // 收起/展开所有面板
     toggleExpand () {

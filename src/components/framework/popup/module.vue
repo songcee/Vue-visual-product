@@ -98,10 +98,10 @@ export default {
     return {
       modules: {
         moduleIndex: -1,
-        input1: 0,
-        input2: 0,
-        input3: 0,
-        input4: 0
+        input1: 100,
+        input2: 100,
+        input3: 100,
+        input4: 100
       },
       error: {
         input1: false,
@@ -186,7 +186,8 @@ export default {
         return
       }
       // 校验所有输入内容是否正确结束
-      this.$store.commit('product_set', {type: 'modules', obj: this.modules}) // 将布局的参数存入store
+      let modules_clone = this.modules
+      this.$store.commit('product_set', {type: 'modules', obj: {...modules_clone, editIndex: -1}}) // 将布局的参数存入store
       this.updateModule() // 更新画板上的页面模块划分
       this.$store.commit('module_hide') // 隐藏页面模块划分窗口
       this.$store.commit('popup_topmask_handler', false) // 隐藏遮罩层

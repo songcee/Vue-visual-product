@@ -1,5 +1,5 @@
 const fun = {
-  mergeObject (source, target) {
+  mergeObject(source, target) {
     // 合并对象，遇到对象则合并，其他覆盖
     let handler = function (source, target) {
       let keys = Object.keys(source)
@@ -30,7 +30,7 @@ const fun = {
   },
 
   // 将obj2中的值更新到对应的obj1上
-  objAssign (obj1, obj2) {
+  objAssign(obj1, obj2) {
     if (!obj1 || !obj2) return
     for (let i in obj2) {
       if (obj1.hasOwnProperty(i) && typeof obj1[i] != 'object') {
@@ -39,7 +39,33 @@ const fun = {
         this.objAssign(obj1[i], obj2[i])
       }
     }
+  },
+
+  // 判断是否为对象
+  isObject(o) {
+    return (typeof o === 'object' || typeof o === 'function') && o !== null
+  },
+
+  // 对象深拷贝
+  deepClone(obj, hash = new WeakMap()) {
+    if (!this.isObject(obj)) {
+      return obj
+    }
+    // 查表
+    if (hash.has(obj)) return hash.get(obj)
+
+    let isArray = Array.isArray(obj)
+    let cloneObj = isArray ? [] : {}
+    // 哈希表设值
+    hash.set(obj, cloneObj)
+
+    let result = Object.keys(obj).map(key => {
+      return {
+        [key]: this.deepClone(obj[key], hash)
+      }
+    })
+    return Object.assign(cloneObj, ...result)
   }
 }
-  
-  export default fun
+
+export default fun
