@@ -36,11 +36,14 @@ import listDatas from "@/components/resources/list";
 export default {
   name: "Option",
   created: function() {
-    this.$util.bus.$on("option_show_desc", index => {
-      this.showModuleDesc(index);
+    this.$util.bus.$on("option_show_desc", name => {
+      this.showModuleDesc(name);
     });
-    this.$util.bus.$on("option_show_option", index => {
-      this.showModuleOption(index);
+    this.$util.bus.$on("option_show_option", name => {
+      this.showModuleOption(name);
+    });
+    this.$util.bus.$on("option_add_default_comp", name => {
+      this.addDefaultComp(name);
     });
   },
   data() {
@@ -94,7 +97,7 @@ export default {
       this.optionData = arr
       console.log('组件配置项', this.optionItem);
       console.log('组件初始化数据', this.optionData)
-      this.$util.bus.$emit('board_add_item', {type: val, value: this.optionData})
+      // this.$util.bus.$emit('board_add_item', {type: val, value: this.optionData})
     }
   },
   methods: {
@@ -117,6 +120,11 @@ export default {
       this.index = index;
       this.showDesc = false;
       this.showOption = true;
+    },
+    // 添加模块并用默认数据配置
+    addDefaultComp (name) {
+      console.log('添加', name, '组件')
+      this.$util.bus.$emit('board_add_item', {type: name, value: this.optionData})
     },
     delOptionArr (index, i) {
       this.optionData[index].splice(i, 1)

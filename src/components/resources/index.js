@@ -8,7 +8,7 @@ modules.install = function (Vue) {
         return
     }
     // 注册模块布局组件
-    Vue.component('Carousel', Carousel)
+    Vue.component('carousel', Carousel)
     modules.installed = true
 }
 

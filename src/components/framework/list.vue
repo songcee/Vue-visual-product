@@ -60,16 +60,16 @@ export default {
   },
   methods: {
     // 设置组件参数
-    optionItem (index) {
-      this.$util.bus.$emit('option_show_option', index)
+    optionItem (name) {
+      this.$util.bus.$emit('option_show_option', name)
     },
     // 查看组件介绍
-    descItem (index) {
-      console.log('查看', index, '组件')
-      this.$util.bus.$emit('option_show_desc', index)
+    descItem (name) {
+      console.log('查看', name, '组件')
+      this.$util.bus.$emit('option_show_desc', name)
     },
     // 添加组件
-    addItem (index) {
+    addItem (name) {
       if (!this.productName) {
         alert('请先创建项目！')
         return
@@ -78,9 +78,8 @@ export default {
         alert('请先划分项目模块！')
         return
       }
-      // console.log('添加', index, '组件')
-      // this.$util.bus.$emit('board_add_item', index)
-      this.optionItem(index)
+      console.log('添加', name, '组件')
+      this.$util.bus.$emit('option_add_default_comp', name)
     },
     // 控制面板的收起和展开
     toggleHandler (type) {

@@ -37,21 +37,27 @@ export default {
       this.updateModule(data)
     })
     this.$util.bus.$on('board_add_item', (data) => { // 设置模块中的组件
-      console.log(this.productModules.editIndex, data)
+      console.log('选中页面中模块的索引：',this.productModules.editIndex, '组件的基础数据：', data)
       if (this.productModules.editIndex == -1) {
         alert('请先选择需要添加的模块！')
         return
       }
-      this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data.value})
+      // 将组件的基础数据存入store
+      this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data})
+      // 通知模块中对应位置的组件更新数据
+      this.$util.bus.$emit('module_update_comp', {index: this.productModules.editIndex, value: data})
       console.log(this.$store.getters.getAllProductInfo)
     })
     this.$util.bus.$on('board_update_item', (data) => { // 更新模块中组件的数据配置
-      console.log(this.productModules.editIndex, data)
+      console.log('选中页面中模块的索引：',this.productModules.editIndex, '更新组件的数据为：', data)
       if (this.productModules.editIndex == -1) {
         alert('请先选择需要添加的模块！')
         return
       }
-      this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data.value})
+      // 将组件配置好的数据存入store
+      this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data})
+      // 通知模块中对应位置的组件更新数据
+      this.$util.bus.$emit('module_update_comp', {index: this.productModules.editIndex, value: data})
       console.log(this.$store.getters.getAllProductInfo)
     })
   },

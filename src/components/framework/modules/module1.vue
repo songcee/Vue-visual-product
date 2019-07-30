@@ -6,7 +6,8 @@
       <div class="module-mask" v-show="editIndex == 0"></div>
       <template>
         <component
-          :is="componentData.moduleIndex"
+          v-if="componentData[0]"
+          :is="componentData[0].type"
         ></component>
       </template>
     </div>
@@ -17,27 +18,35 @@
 export default {
   name: "Module1",
   props: ['formate'],
-  mounted () {
+  created () {
     // 每个模块的公用方法，可以复制到每个模块控制器中去
     console.log('选择第一种模块划分方式')
+    this.$util.bus.$on('module_update_comp', (data) => {
+      // 更新模块中组件的数据
+      this.$set(this.componentData, data.index, data.value)
+    })
     // 每个模块的公用方法结束
   },
   computed: {
+    // 每个模块的公用方法，可以复制到每个模块控制器中去
     editIndex () { // 正在编辑的模块
       return this.$store.state.product.modules.editIndex
     },
-    componentData () { // 正在编辑的模块
-      return this.$store.state.product.components
-    },
+    // componentData () { // 模块中组件使用的数据
+    //   console.log(111)
+    //   return this.$store.state.product.components
+    // },
+    // 每个模块的公用方法结束
   },
-  watch: {
-    componentData () {
-      console.log('component data change')
-    }
-  },
+  // watch: {
+  //   componentData () {
+  //     console.log('component data change')
+  //   }
+  // },
   data() {
     return {
       // 每个模块的公用属性，可以复制到每个模块控制器中去
+      componentData: {}
       // 每个模块的公用属性结束
     };
   },

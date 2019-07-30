@@ -76,6 +76,7 @@ export default {
     }
   },
   mounted () {
+    console.log('123123123')
     this.runInv();
   }
 }
