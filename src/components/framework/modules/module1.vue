@@ -24,7 +24,7 @@ export default {
     console.log('选择第一种模块划分方式')
     this.$util.bus.$on('module_update_comp', (data) => {
       // 更新模块中组件的数据
-      this.$set(this.componentData, data.index, data.value)
+      this.$set(this.componentData, data.index, this.$util.deepClone(data.value))
     })
     // 每个模块的公用方法结束
   },
@@ -33,26 +33,18 @@ export default {
     editIndex () { // 正在编辑的模块
       return this.$store.state.product.modules.editIndex
     },
-    // componentData () { // 模块中组件使用的数据
-    //   console.log(111)
-    //   return this.$store.state.product.components
-    // },
     // 每个模块的公用方法结束
   },
-  // watch: {
-  //   componentData () {
-  //     console.log('component data change')
-  //   }
-  // },
   data() {
     return {
       // 每个模块的公用属性，可以复制到每个模块控制器中去
-      componentData: {}
+      componentData: {} // 存放所有组件的数据
       // 每个模块的公用属性结束
     };
   },
   methods: {
     // 每个模块的公用方法，可以复制到每个模块控制器中去
+    // 选中要编辑的模块，颜色变红
     chooseModule (index) {
       if (this.editIndex == index) {
         this.$store.commit('product_set_editIndex', -1)

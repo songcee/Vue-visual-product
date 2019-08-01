@@ -78,7 +78,6 @@ export default {
         alert('请先划分项目模块！')
         return
       }
-      console.log('添加', name, '组件')
       this.$util.bus.$emit('option_add_default_comp', name)
     },
     // 控制面板的收起和展开

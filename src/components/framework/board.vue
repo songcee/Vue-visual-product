@@ -46,7 +46,6 @@ export default {
       this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data})
       // 通知模块中对应位置的组件更新数据
       this.$util.bus.$emit('module_update_comp', {index: this.productModules.editIndex, value: data})
-      console.log(this.$store.getters.getAllProductInfo)
     })
     this.$util.bus.$on('board_update_item', (data) => { // 更新模块中组件的数据配置
       console.log('选中页面中模块的索引：',this.productModules.editIndex, '更新组件的数据为：', data)
@@ -58,7 +57,6 @@ export default {
       this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data})
       // 通知模块中对应位置的组件更新数据
       this.$util.bus.$emit('module_update_comp', {index: this.productModules.editIndex, value: data})
-      console.log(this.$store.getters.getAllProductInfo)
     })
   },
   data () {

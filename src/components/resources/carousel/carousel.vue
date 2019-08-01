@@ -40,6 +40,12 @@ export default {
       isShow: true
     }
   },
+  watch: {
+    inv () {
+      this.clearInv();
+      this.runInv();
+    }
+  },
   computed: {
     prevIndex () {
       if (this.nowIndex === 0) {
@@ -76,7 +82,6 @@ export default {
     }
   },
   mounted () {
-    console.log('123123123')
     this.runInv();
   }
 }

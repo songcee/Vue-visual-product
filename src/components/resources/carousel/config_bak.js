@@ -14,23 +14,37 @@ const config = {
       {
         key: 'slides', // 接收的字段名
         type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
-        dataType: 'array-string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
-        text: '图片url', // 显示的选项名称
-        default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本
-        validation: function (val) { // 校验输入内容的正则或者function(val){}
-          let result = false
-          try {
-            if(val.indexOf('http://') !== 0) {
-              alert('图片url必须是以http://开头')
-            } else {
-              result = true
+        dataType: 'array-object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
+        text: '图片相关信息', // 显示的选项名称
+        arrayObject: [{
+          key: 'url',
+          type: 'text',
+          dataType: 'string',
+          text: '图片的url',
+          default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本
+          validation: function (val) { // 校验输入内容的正则或者function(val){}
+            let result = false
+            try {
+              if(val.indexOf('http://') !== 0) {
+                alert('图片url必须是以http://开头')
+              } else {
+                result = true
+              }
+            } catch (e) {
+              window.console.log(e)
             }
-          } catch (e) {
-            window.console.log(e)
-          }
-          return result
-        },
-        description: '轮播图片url', // 介绍说明
+            return result
+          },
+          description: '轮播图片url', // 介绍说明
+        }, {
+          key: 'title',
+          type: 'text',
+          dataType: 'string',
+          text: '图片的标题',
+          default: '标题', // 默认填充的文本
+          description: '轮播图片标题', // 介绍说明
+        }],
+        description: '轮播图片的相关信息', // 介绍说明
         mustRequired: true // 是否必填
       },
       {

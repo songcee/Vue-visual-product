@@ -2,19 +2,33 @@
 <template>
   <div class="option-container" :class="{expand}">
     <div class="block-body">
-      <div v-if="index != -1" class="block-body-div">
-        <p class="item-title" :title="listDatas[index].title.text">{{listDatas[index].title.text}}</p>
-        <div class="item-desc-banner" v-if="showDesc">{{listDatas[index].description}}</div>
+      <div v-if="compName != -1" class="block-body-div">
+        <p class="item-title" :title="listDatas[compName].title.text">{{listDatas[compName].title.text}}</p>
+        <div class="item-desc-banner" v-if="showDesc">{{listDatas[compName].description}}</div>
         <div class="item-option-banner" v-if="showOption && optionItem">
           <div v-for="(item, index) in optionItem.option.data" :key="index">
+            <!-- 如果是text类型 -->
             <div v-if="item.type == 'text'" class="item-option-nav">
               <label :title="item.text">{{item.text}}</label><span>：</span>
-              <input v-model="optionData[item.key]"/>
+              <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key]" type="number" />
+              <input v-else v-model="optionData[item.key]"/>
             </div>
+            <!-- 如果是array-text类型 -->
             <div v-if="item.type == 'array-text'" class="item-option-nav">
               <label :title="item.text">{{item.text}}</label><span>：</span>
               <div class="item-option-array" v-for="(v,i) in optionData[item.key]" :key="i">
-                <input v-model="optionData[item.key][i]" type="item.dataType" />
+                <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key][i]" type="number" />
+                <input v-else v-model.number="optionData[item.key][i]" />
+                <span class="array-set" v-if="((optionData[item.key].length != 1 && i == 0) || i != 0) && i != optionData[item.key].length - 1" @click="delOptionArr(item.key, i)">删除</span>
+                <span class="array-set" v-if="optionData[item.key].length == 1 || i == optionData[item.key].length - 1" @click="addOptionArr(item.key, index)">增加</span>
+              </div>
+            </div>
+            <!-- 如果是array-object类型 -->
+            <div v-if="item.type == 'array-object'" class="item-option-nav">
+              <label :title="item.text">{{item.text}}</label><span>：</span>
+              <div class="item-option-array" v-for="(v,i) in optionData[item.key]" :key="i">
+                <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key][i]" type="number" />
+                <input v-else v-model.number="optionData[item.key][i]" />
                 <span class="array-set" v-if="((optionData[item.key].length != 1 && i == 0) || i != 0) && i != optionData[item.key].length - 1" @click="delOptionArr(item.key, i)">删除</span>
                 <span class="array-set" v-if="optionData[item.key].length == 1 || i == optionData[item.key].length - 1" @click="addOptionArr(item.key, index)">增加</span>
               </div>
@@ -23,7 +37,7 @@
         </div>
         <div class="item-option-foot" v-if="showOption">
           <button type="button" class="vp-btn vp-btn-blue" @click="applyOption()">应用</button>
-          <button type="button" class="vp-btn">重置</button>
+          <button type="button" class="vp-btn" @click="resetOption()">初始化</button>
         </div>
       </div>
     </div>
@@ -33,6 +47,7 @@
 
 <script>
 import listDatas from "@/components/resources/list";
+import { setTimeout } from 'timers';
 export default {
   name: "Option",
   created: function() {
@@ -50,7 +65,7 @@ export default {
     return {
       expand: true,
       listDatas: listDatas, // 组件列表数据
-      index: -1, // 选中组件的名称
+      compName: -1, // 选中组件的名称
       showDesc: false, // 显示组件描述
       showOption: false, // 显示组件配置项
       optionItem: void 0, // 组件配置项
@@ -69,16 +84,68 @@ export default {
     handlerExpend(val) {
       this.toggleHandler(val);
     },
-    index(val) {
+    compName(val) {
       console.log('选择', val, '组件')
-      if (val == -1) {
+      if (val == -1) { // 如果未选择组件，则返回
         this.optionItem = void 0;
         this.optionData = {}
         return
-      } else {
+      } else { // 选择组件，则将组件中的配置项克隆出来。一是为了不影响初始配置项的设置，二是方便回退配置项
         this.optionItem = this.$util.deepClone(this.listDatas[val]);
       }
       // 初始化数据
+      this.initOption()
+    }
+  },
+  methods: {
+    // 控制面板的收起和展开
+    toggleHandler(type) {
+      if (type === undefined) {
+        this.expand = !this.expand;
+      } else {
+        this.expand = !!type;
+      }
+    },
+    // 显示模块介绍
+    showModuleDesc(name) {
+      this.compName = name;
+      this.showDesc = true;
+      this.showOption = false;
+    },
+    // 显示模块配置项
+    showModuleOption(name) {
+      this.compName = name;
+      this.showDesc = false;
+      this.showOption = true;
+    },
+    // 添加模块并用默认数据配置
+    addDefaultComp (name) {
+      console.log('添加', name, '组件')
+      this.compName = name;
+      setTimeout(() => {
+        this.$util.bus.$emit('board_add_item', {type: name, value: this.optionData})
+      })
+    },
+    // 连续输入框后面的删除按钮
+    delOptionArr (key, i) {
+      this.optionData[key].splice(i, 1)
+    },
+    // 连续输入框后面的增加按钮
+    addOptionArr (key, index) {
+      this.optionData[key].push(this.optionItem.option.data[index].default)
+    },
+    // 点击应用组件数据
+    applyOption () {
+      console.log('应用组件数据', this.optionData);
+      this.$util.bus.$emit('board_update_item', {type: this.compName, value: this.optionData})
+    },
+    // 点击初始化组件数据
+    resetOption () {
+      this.initOption();
+    },
+    // 初始化数据
+    initOption () {
+      this.optionItem = this.$util.deepClone(this.listDatas[this.compName]);
       let obj = {}
       for(let k = 0; k < this.optionItem.option.data.length; k++ ) {
         let val
@@ -96,46 +163,7 @@ export default {
       }
       this.optionData = obj
       console.log('组件配置项', this.optionItem);
-      console.log('组件初始化数据', this.optionData)
-      // this.$util.bus.$emit('board_add_item', {type: val, value: this.optionData})
-    }
-  },
-  methods: {
-    // 控制面板的收起和展开
-    toggleHandler(type) {
-      if (type === undefined) {
-        this.expand = !this.expand;
-      } else {
-        this.expand = !!type;
-      }
-    },
-    // 显示模块介绍
-    showModuleDesc(index) {
-      this.index = index;
-      this.showDesc = true;
-      this.showOption = false;
-    },
-    // 显示模块配置项
-    showModuleOption(index) {
-      this.index = index;
-      this.showDesc = false;
-      this.showOption = true;
-    },
-    // 添加模块并用默认数据配置
-    addDefaultComp (name) {
-      console.log('添加', name, '组件')
-      this.$util.bus.$emit('board_add_item', {type: name, value: this.optionData})
-    },
-    delOptionArr (key, i) {
-      this.optionData[key].splice(i, 1)
-    },
-    addOptionArr (key, index) {
-      this.optionData[key].push(this.optionItem.option.data[index].default)
-    },
-    // 应用组价数据
-    applyOption () {
-      console.log('应用组件数据', this.optionData);
-      this.$util.bus.$emit('board_update_item', {type: this.index, value: this.optionData})
+      console.log('组件初始化数据', this.optionData);
     }
   }
 };
