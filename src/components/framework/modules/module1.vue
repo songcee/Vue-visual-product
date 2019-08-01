@@ -8,6 +8,7 @@
         <component
           v-if="componentData[0]"
           :is="componentData[0].type"
+          v-bind="componentData[0].value"
         ></component>
       </template>
     </div>

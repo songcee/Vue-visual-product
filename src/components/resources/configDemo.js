@@ -22,7 +22,9 @@ const config = {
   option: { // 放到option的数据配置项
     data: [ // 数据集
       {
+        key: 'code', // 接收的字段名
         type: 'text', // 数据类型（text-纯文本 select-下拉列表 ）
+        dataType: 'string', // 接收字段的类型（number/string/boolean/array-/object-）
         text: '初始化股票代码', // 显示的选项名称
         default: '', // 默认填充的文本
         validation: '/^\d{6}$/', // 校验输入内容的正则或者function(val){}
@@ -30,7 +32,9 @@ const config = {
         mustRequired: false // 是否必填
       },
       {
+        key: 'type', // 接收的字段名
         type: 'select', // 数据类型
+        dataType: 'string', // 接收字段的类型（number/string/boolean/array-/object-）
         text: '默认展示状态', // 显示的选项名称
         select: [ // 下拉框的内容
           {
@@ -46,7 +50,9 @@ const config = {
         mustRequired: false // 是否必填
       },
       {
+        key: 'bgcolor', // 接收的字段名
         type: 'text', // 数据类型（text-纯文本 select-下拉列表 ）
+        dataType: 'string', // 接收字段的类型（number/string/boolean/array-/object-）
         text: '背景颜色', // 显示的选项名称
         default: '#fff', // 默认填充的文本
         validation: function (val) { // 校验输入内容的正则或者function(val){}

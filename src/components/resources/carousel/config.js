@@ -12,9 +12,11 @@ const config = {
   option: { // 放到option的数据配置项
     data: [ // 数据集
       {
+        key: 'slides', // 接收的字段名
         type: 'array-text', // 数据类型（text-纯文本 select-下拉列表 ）
+        dataType: 'array-string', // 接收字段的类型（number/string/boolean/array-/object-）
         text: '图片url', // 显示的选项名称
-        default: '', // 默认填充的文本
+        default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本
         validation: function (val) { // 校验输入内容的正则或者function(val){}
           let result = false
           try {
@@ -32,9 +34,11 @@ const config = {
         mustRequired: true // 是否必填
       },
       {
+        key: 'inv', // 接收的字段名
         type: 'text', // 数据类型（text-纯文本 select-下拉列表 ）
+        dataType: 'number', // 接收字段的类型（number/string/boolean/array-/object-）
         text: '切换时间间隔（ms）', // 显示的选项名称
-        default: '2000', // 默认填充的文本
+        default: 2000, // 默认填充的文本
         validation: '/\d/', // 校验输入内容的正则或者function(val){}
         description: '图片之间自动切换的时间间隔', // 介绍说明
         mustRequired: false // 是否必填

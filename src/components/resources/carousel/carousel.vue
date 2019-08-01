@@ -2,16 +2,16 @@
 <template>
   <div class="slide-show" @mouseover="clearInv" @mouseout="runInv">
     <div class="slide-img">
-      <a :href="slides[nowIndex].href">
+      <!-- <a :href="slides[nowIndex].href"> -->
         <transition name="slide-trans">
-          <img v-if="isShow" :src="slides[nowIndex].src">
+          <img v-if="isShow" :src="slides[nowIndex]">
         </transition>
         <transition name="slide-trans-old">
-          <img v-if="!isShow" :src="slides[nowIndex].src">
+          <img v-if="!isShow" :src="slides[nowIndex]">
         </transition>
-      </a>
+      <!-- </a> -->
     </div>
-    <h2>{{ slides[nowIndex].title }}</h2>
+    <!-- <h2>{{ slides[nowIndex].title }}</h2> -->
     <ul class="slide-pages">
       <li @click="goto(prevIndex)">&lt;</li>
       <li v-for="(item, index) in slides" :key="'Carousel_'+index" @click="goto(index)">
@@ -27,7 +27,7 @@ export default {
   props: {
     slides: {
       type: Array,
-      default: []
+      default: () => {return []}
     },
     inv: {
       type: Number,
