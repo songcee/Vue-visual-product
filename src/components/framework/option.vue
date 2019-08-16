@@ -14,7 +14,7 @@
               <input v-else v-model="optionData[item.key]"/>
             </div>
             <!-- 如果是array-text类型 -->
-            <div v-if="item.type == 'array-text'" class="item-option-nav">
+            <div v-else-if="item.type == 'array-text'" class="item-option-nav">
               <label :title="item.text">{{item.text}}</label><span>：</span>
               <div class="item-option-array" v-for="(v,i) in optionData[item.key]" :key="i">
                 <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key][i]" type="number" />
@@ -24,7 +24,7 @@
               </div>
             </div>
             <!-- 如果是array-object类型 -->
-            <div v-if="item.type == 'array-object'" class="item-option-nav">
+            <div v-else-if="item.type == 'array-object'" class="item-option-nav">
               <label :title="item.text">{{item.text}}</label><span>：</span>
               <div class="item-option-array" v-for="(v,i) in optionData[item.key]" :key="i">
                 <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key][i]" type="number" />

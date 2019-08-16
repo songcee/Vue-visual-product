@@ -22,49 +22,83 @@ const config = {
   option: { // 放到option的数据配置项
     data: [ // 数据集
       {
-        key: 'code', // 接收的字段名
-        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
-        dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
-        text: '初始化股票代码', // 显示的选项名称
-        default: '', // 默认填充的文本
+        key: 'code', // 接收的字段名（必传）
+        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据）（必传）
+        dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
+        text: '初始化股票代码', // 显示的选项名称（必传）
+        default: '', // 默认填充的文本（必传）
         validation: '/^\d{6}$/', // 校验输入内容的正则或者function(val){}
-        description: '股票代码', // 介绍说明
-        mustRequired: false // 是否必填
+        description: '股票代码', // 介绍说明（必传）
+        mustRequired: false // 是否必填（必传）
       },
       {
-        key: 'type', // 接收的字段名
-        type: 'select', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
-        dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
-        text: '默认展示状态', // 显示的选项名称
-        select: [ // 下拉框的内容
+        key: 'type', // 接收的字段名（必传）
+        type: 'select', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据）（必传）
+        dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
+        text: '默认展示状态', // 显示的选项名称（必传）
+        select: [ // 下拉框的内容（type=select或者array-select时必传）
           {
-            text: '分时图',
-            value: 'share-line'
+            text: '分时图', // （必传）
+            value: 'share-line' // （必传）
           }, {
             text: 'K线图',
             value: 'k-line'
           }
         ],
-        default: 'share-line',
-        description: '股票代码', // 介绍说明
-        mustRequired: false // 是否必填
+        default: 'share-line', // （必传）
+        description: '股票代码', // 介绍说明（必传）
+        mustRequired: false // 是否必填（必传）
       },
       {
-        key: 'bgcolor', // 接收的字段名
-        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
-        dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
-        text: '背景颜色', // 显示的选项名称
-        default: '#fff', // 默认填充的文本
+        key: 'urls', // 接收的字段名
+        type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据）
+        dataType: 'array-string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
+        text: '轮播图url', // 显示的选项名称
+        default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本
         validation: function (val) { // 校验输入内容的正则或者function(val){}
           let result = false
           try {
-            result = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(val)
+            if(val.indexOf('http://') !== 0) {
+              alert('图片url必须是以http://开头')
+            } else {
+              result = true
+            }
           } catch (e) {
             window.console.log(e)
           }
           return result
         },
-        description: '股票代码', // 介绍说明
+        description: '轮播图中每个图片的url', // 介绍说明
+        mustRequired: true // 是否必填
+      },
+      {
+        key: 'slides', // 接收的字段名
+        type: 'array', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据）
+        dataType: 'array-object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
+        // 如果dataType是object或array-*可以不填default和validation；但是当dataType是object或array-object时，必填objectOptions
+        text: '轮播图中的url和标题', // 显示的选项名称
+        objectOptions: [ // 接受数据类型是对象时配置每个对象里的具体数据，数组的每一项表示对象的每一个key-value键值对；当dataType是object或array-object时，必填此项
+          {
+            key: 'url',
+            type: 'text',
+            dataType: 'string',
+            text: '图片的url',
+            default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg',
+            validation: '',
+            description: '轮播图中每个图片的url', // 介绍说明
+            mustRequired: true // 是否必填
+          },{
+            key: 'title',
+            type: 'text',
+            dataType: 'string',
+            text: '图片的标题',
+            default: '',
+            validation: '',
+            description: '轮播图中每个图片的标题', // 介绍说明
+            mustRequired: true // 是否必填
+          }
+        ],
+        description: '轮播图中每个图片的url以及要显示的标题', // 介绍说明
         mustRequired: true // 是否必填
       }
     ]
