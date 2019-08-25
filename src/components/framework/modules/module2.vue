@@ -1,44 +1,65 @@
 <!-- 页面分为上下两个模块，上方模块高度固定，下方模块高度自适应 -->
 <template>
   <div class="module2-container">
-      <div class="module2-top" :style="{height: formate.fixHeight + 'px'}" @click="chooseModule(0)">
-        <!-- 选中的遮罩效果 -->
-        <div class="module-mask" v-show="editIndex == 0"></div>
-        <template></template>
-      </div>
-      <div class="module2-bottom" :style="{top: (Number(formate.fixHeight) + 1) + 'px'}" @click="chooseModule(1)">
-        <!-- 选中的遮罩效果 -->
-        <div class="module-mask" v-show="editIndex == 1"></div>
-        <template></template>
-      </div>
+    <div class="module2-top" :style="{height: formate.input1 + 'px'}" @click="chooseModule(0)">
+      <!-- 选中的遮罩效果 -->
+      <div class="module-mask" v-show="editIndex == 0"></div>
+      <template>
+        <component
+          v-if="componentData[0]"
+          :is="componentData[0].type"
+          v-bind="componentData[0].value"
+        ></component>
+      </template>
+    </div>
+    <div
+      class="module2-bottom"
+      :style="{top: (Number(formate.input1) + 1) + 'px'}"
+      @click="chooseModule(1)"
+    >
+      <!-- 选中的遮罩效果 -->
+      <div class="module-mask" v-show="editIndex == 1"></div>
+      <template>
+        <component
+          v-if="componentData[1]"
+          :is="componentData[1].type"
+          v-bind="componentData[1].value"
+        ></component>
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Module2",
-  props: ['formate'],
-  mounted () {
+  props: ["formate"],
+  mounted() {
     // 每个模块的公用方法，可以复制到每个模块控制器中去
-    console.log('选择第二种模块划分方式')
+    console.log("选择第二种模块划分方式");
+    this.$util.bus.$on('module_update_comp', (data) => {
+      // 更新模块中组件的数据
+      this.$set(this.componentData, data.index, this.$util.deepClone(data.value))
+    })
     // 每个模块的公用方法结束
   },
   computed: {
+    // 每个模块的公用方法，可以复制到每个模块控制器中去
     editIndex () { // 正在编辑的模块
       return this.$store.state.product.modules.editIndex
     },
-    componentData () { // 正在编辑的模块
-      return this.$store.state.product.components
-    },
+    // 每个模块的公用方法结束
   },
   data() {
     return {
       // 每个模块的公用属性，可以复制到每个模块控制器中去
+      componentData: {} // 存放所有组件的数据
       // 每个模块的公用属性结束
     };
   },
   methods: {
     // 每个模块的公用方法，可以复制到每个模块控制器中去
+    // 选中要编辑的模块，颜色变红
     chooseModule (index) {
       if (this.editIndex == index) {
         this.$store.commit('product_set_editIndex', -1)
@@ -63,12 +84,13 @@ export default {
   left: 0;
   right: 0;
   border-bottom: 1px solid #000;
+  overflow: hidden;
 }
 .module2-bottom {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(100%-100px);
+  overflow: hidden;
 }
 </style>

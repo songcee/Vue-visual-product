@@ -19,10 +19,10 @@ const product = {
     modules: { // 项目模块划分信息
       moduleIndex: -1, // 模块划分类型
       editIndex: -1, // 正在编辑的模块
-      input1: 100, // 下面是可能用到的4种参数
-      input2: 100,
-      input3: 100,
-      input4: 100
+      input1: 50, // 下面是可能用到的4种参数
+      input2: 50,
+      input3: 50,
+      input4: 50
     },
     components: {} // 项目每个模块中的组件
   },

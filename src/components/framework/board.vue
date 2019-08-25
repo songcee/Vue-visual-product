@@ -106,16 +106,22 @@ export default {
     },
     // 更新页面模块划分
     updateModule (data) {
-      let obj = {}
-      switch (Number(data.moduleIndex)) {
-        case 1:
-          obj.moduleIndex = 1
-          break
-        case 2:
-          obj.moduleIndex = 2
-          obj.fixHeight = data.input1
-          break
-      }
+      // let obj = {}
+      // switch (Number(data.moduleIndex)) {
+      //   case 1:
+      //     obj.moduleIndex = 1
+      //     break
+      //   case 2:
+      //     obj.moduleIndex = 2
+      //     obj.fixHeight = data.input1
+      //     break
+      //   case 3:
+      //     obj.moduleIndex = 3
+      //     obj.fixHeight = data.input1
+      //     obj.fixHeight = data.input1
+      //     break
+      // }
+      let obj = this.$util.deepClone(data)
       this.productModule = obj
     },
     // 收起/展开所有面板
@@ -152,5 +158,6 @@ export default {
 }
 .product-canvas {
   margin: 0 auto;
+  position: relative;
 }
 </style>

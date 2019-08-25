@@ -26,7 +26,7 @@
         </div>
         <div class="module-item-desc" v-if="modules.moduleIndex == 3">
           页面分为三个模块，上部模块高度固定为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />px，
-          下部模块高度铺满剩下部分，宽度各占一半。
+          下部模块高度铺满剩下部分，左侧宽度所占百分比为<input v-model="modules.input2" :class="{'warning-border': error.input2}" @blur="check('input2', modules.input2)" />%，右侧宽度铺满剩下部分。
         </div>
         <div class="module-item-desc" v-if="modules.moduleIndex == 4">
           页面分为三个模块，上部模块高度固定为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />px，
@@ -44,7 +44,7 @@
         <div class="module-item-desc" v-if="modules.moduleIndex == 7">
           页面分为四个模块，上部模块高度固定为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />px，
           下部模块高度固定为<input v-model="modules.input2" :class="{'warning-border': error.input2}" @blur="check('input2', modules.input2)" />px，
-          中间高度自适应，左右宽度各占一半。
+          中间高度自适应，左侧宽度所占百分比为<input v-model="modules.input3" :class="{'warning-border': error.input3}" @blur="check('input3', modules.input3)" />%，右侧宽度铺满剩下部分。
         </div>
         <div class="module-item-desc" v-if="modules.moduleIndex == 8">
           页面分为四个模块，上部模块高度固定为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />px，
@@ -61,7 +61,7 @@
           页面分为两个模块，左侧宽度固定为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />px，右侧宽度铺满剩下部分，高度为页面100%。
         </div>
         <div class="module-item-desc" v-if="modules.moduleIndex == 11">
-          页面分为两个模块，左右宽度各占一半，高度为页面100%。
+          页面分为两个模块，左侧宽度所占百分比为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />%，右侧宽度铺满剩下部分，高度为页面100%。
         </div>
         <div class="module-item-desc" v-if="modules.moduleIndex == 12">
           页面分为三个模块，左侧宽度固定为<input v-model="modules.input1" :class="{'warning-border': error.input1}" @blur="check('input1', modules.input1)" />px，
@@ -98,10 +98,10 @@ export default {
     return {
       modules: {
         moduleIndex: -1,
-        input1: 100,
-        input2: 100,
-        input3: 100,
-        input4: 100
+        input1: 50,
+        input2: 50,
+        input3: 50,
+        input4: 50
       },
       error: {
         input1: false,

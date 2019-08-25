@@ -13,11 +13,11 @@ const config = {
     data: [ // 数据集
       {
         key: 'slides', // 接收的字段名
-        type: 'array', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据）
-        dataType: 'array-object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
-        text: '图片url和标题', // 显示的选项名称
-        default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本（如果dataType是object或array-*可以不填）
-        validation: function (val) { // 校验输入内容的正则或者function(val){}（如果dataType是object或array-*可以不填）
+        type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
+        dataType: 'array-string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
+        text: '图片url', // 显示的选项名称
+        default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本
+        validation: function (val) { // 校验输入内容的正则或者function(val){}
           let result = false
           try {
             if(val.indexOf('http://') !== 0) {
@@ -30,39 +30,7 @@ const config = {
           }
           return result
         },
-        objectOptions: [ // 接受数据类型是对象时配置每个对象里的具体数据，数组的每一项表示对象的每一个key-value键值对；当dataType是object或array-object时，必填此项
-          {
-            key: 'url',
-            type: 'text',
-            dataType: 'string',
-            text: '图片的url',
-            default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg',
-            validation: function (val) { // 校验输入内容的正则或者function(val){}（如果dataType是object或array-*可以不填）
-              let result = false
-              try {
-                if(val.indexOf('http://') !== 0) {
-                  alert('图片url必须是以http://开头')
-                } else {
-                  result = true
-                }
-              } catch (e) {
-                window.console.log(e)
-              }
-              return result
-            },
-            description: '轮播图中每个图片的标题', // 介绍说明
-            mustRequired: true // 是否必填
-          },{
-            key: 'title',
-            type: 'text',
-            dataType: 'string',
-            text: '图片的标题',
-            default: '',
-            description: '轮播图中每个图片的标题', // 介绍说明
-            mustRequired: true // 是否必填
-          }
-        ],
-        description: '轮播图片url以及展示的标题', // 介绍说明
+        description: '轮播图片url', // 介绍说明
         mustRequired: true // 是否必填
       },
       {

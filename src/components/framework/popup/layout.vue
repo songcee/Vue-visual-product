@@ -49,7 +49,7 @@
         <div class="item">
           <div class="item-adaption-desc" v-if="product.height_adaption == 1">高度自适应详细说明：<br/>页面高度固定为<input v-model="product.adaption.fixHeight" :class="{'warning-border': error.fixHeight}" @blur="check('fixHeight', product.adaption.fixHeight)" />px；</div>
           <div class="item-adaption-desc" v-if="product.height_adaption == 2">高度自适应详细说明：<br/>页面最小高度为<input v-model="product.adaption.minHeight" :class="{'warning-border': error.minHeight}" @blur="check('minHeight', product.adaption.minHeight)" />px，大于这个值时为浏览器100%高度；</div>
-          <div class="item-adaption-desc" v-if="product.height_adaption == 2">高度自适应详细说明：<br/>不设置页面的高度，由内部元素撑开</div>
+          <div class="item-adaption-desc" v-if="product.height_adaption == 3">高度自适应详细说明：<br/>不设置页面的高度，由内部元素撑开</div>
         </div>
       </div>
       <div class="module-footer">
