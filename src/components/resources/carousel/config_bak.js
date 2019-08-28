@@ -13,7 +13,7 @@ const config = {
     data: [ // 数据集
       {
         key: 'slides', // 接收的字段名
-        type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
+        type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;object:对象数据）
         dataType: 'array-object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
         text: '图片相关信息', // 显示的选项名称
         arrayObject: [{
@@ -49,7 +49,7 @@ const config = {
       },
       {
         key: 'inv', // 接收的字段名
-        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表）
+        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;object:对象数据）
         dataType: 'number', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
         text: '切换时间间隔（ms）', // 显示的选项名称
         default: 2000, // 默认填充的文本

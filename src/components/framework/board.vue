@@ -19,15 +19,19 @@
             :formate="productModule"
           ></component>
         </template>
+        <!-- <kline1 :successCode="{code: '000567', name: '海德股份', time: '2019-02-01', top: '10日最高涨幅23.97'}"></kline1> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import listDatas from '@/components/resources/list'
+// import kline1 from '@/components/resources/kLine1/kLine1.vue'
 export default {
   name: 'Board',
+  components: {
+    // kline1
+  },
   created: function () {
     // 监听事件
     this.$util.bus.$on('board_updateLayout', (data) => { // 更新项目信息以及页面自适应情况

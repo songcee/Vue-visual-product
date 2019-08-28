@@ -33,6 +33,7 @@
                 <span class="array-set" v-if="optionData[item.key].length == 1 || i == optionData[item.key].length - 1" @click="addOptionArr(item.key, index)">增加</span>
               </div>
             </div>
+            <OptionObject v-else-if="item.type == 'object'" :option="item"></OptionObject>
           </div>
         </div>
         <div class="item-option-foot" v-if="showOption">
@@ -47,9 +48,13 @@
 
 <script>
 import listDatas from "@/components/resources/list";
+import OptionObject from '@/components/framework/option/option-object';
 import { setTimeout } from 'timers';
 export default {
   name: "Option",
+  components: {
+    OptionObject
+  },
   created: function() {
     this.$util.bus.$on("option_show_desc", name => {
       this.showModuleDesc(name);
@@ -247,7 +252,7 @@ export default {
 }
 .item-option-nav {
   font-size: 13px;
-  padding: 0 10px;
+  margin: 0 10px;
   line-height: 30px;
   color: #555;
 }
