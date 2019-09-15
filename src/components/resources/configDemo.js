@@ -23,17 +23,17 @@ const config = {
     data: [ // 数据集
       {
         key: 'code', // 接收的字段名（必传）
-        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据;object:对象数据）（必传）
+        type: 'text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
         dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
         text: '初始化股票代码', // 显示的选项名称（必传）
         default: '', // 默认填充的文本（必传）
-        validation: '/^\d{6}$/', // 校验输入内容的正则或者function(val){}
+        validation: /^\d{6}$/, // 校验输入内容的正则或者function(val){}
         description: '股票代码', // 介绍说明（必传）
         mustRequired: false // 是否必填（必传）
       },
       {
         key: 'type', // 接收的字段名（必传）
-        type: 'select', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据;object:对象数据）（必传）
+        type: 'select', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
         dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
         text: '默认展示状态', // 显示的选项名称（必传）
         select: [ // 下拉框的内容（type=select或者array-select时必传）
@@ -51,7 +51,7 @@ const config = {
       },
       {
         key: 'urls', // 接收的字段名
-        type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据;object:对象数据）
+        type: 'array-text', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）
         dataType: 'array-string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
         text: '轮播图url', // 显示的选项名称
         default: 'http://u.thsi.cn/imgsrc/level/c47b56693cd5aad5ef5dbede6d1dab83.jpg', // 默认填充的文本
@@ -73,7 +73,7 @@ const config = {
       },
       {
         key: 'slides', // 接收的字段名
-        type: 'array', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据;object:对象数据）
+        type: 'array', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）
         dataType: 'array-object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）
         // 如果dataType是object或array-*可以不填default和validation；但是当dataType是object或array-object时，必填objectOptions
         text: '轮播图中的url和标题', // 显示的选项名称
@@ -106,7 +106,7 @@ const config = {
   initData: [{ // 初始化组件时需要调用的方法
     name: 'initComponent', // 方法名
     params: [{ // 传递的参数（注意是按顺序的）
-      validation: '/^\d{6}$/', // 校验输入内容的正则或者function(val){}
+      validation: /^\d{6}$/, // 校验输入内容的正则或者function(val){}
       description: '股票代码', // 介绍说明
       mustRequired: true, // 是否必传
     }],
@@ -117,7 +117,7 @@ const config = {
     {
       name: 'code', // 接收数据的字段名
       default: '', // 默认值，即接收值检验出错时使用
-      validation: '/^\d{6}$/', // 接收值校验，规则同上方配置项中的数据校验
+      validation: /^\d{6}$/, // 接收值校验，规则同上方配置项中的数据校验
       description: '股票代码' // 介绍说明
     }
   ],

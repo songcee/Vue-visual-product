@@ -14,8 +14,8 @@
         >
           <p class="list-item-text">{{item.title.text}}</p>
           <div class="list-item-handle" :class="[item.handler?'show':'hide']">
-            <span class="list-item-desc" @click.stop="descItem(index)">查看</span>
-            <span class="list-item-add" @click.stop="addItem(index)">添加</span>
+            <span class="list-item-desc" @click.stop="descItem(index)">说明</span>
+            <!-- <span class="list-item-add" @click.stop="addItem(index)">添加</span> -->
           </div>
         </div>
       </div>
@@ -163,11 +163,11 @@ export default {
   position: absolute;
   left: 300px;
   top: 0;
-  width: 88px;
+  width: 44px;
   transition: all 0.2s ease-in-out 0s;
 }
 .list-item-handle.show {
-  margin-left: -88px;
+  margin-left: -44px;
 }
 .list-item-handle.hide {
   margin-left: 0;

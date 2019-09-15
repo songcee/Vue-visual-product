@@ -4,36 +4,13 @@
     <div class="block-body">
       <div v-if="compName != -1" class="block-body-div">
         <p class="item-title" :title="listDatas[compName].title.text">{{listDatas[compName].title.text}}</p>
-        <div class="item-desc-banner" v-if="showDesc">{{listDatas[compName].description}}</div>
+        <div class="item-desc-banner" v-if="showDesc" v-html="listDatas[compName].description"></div>
         <div class="item-option-banner" v-if="showOption && optionItem">
           <div v-for="(item, index) in optionItem.option.data" :key="index">
-            <!-- 如果是text类型 -->
-            <div v-if="item.type == 'text'" class="item-option-nav">
-              <label :title="item.text">{{item.text}}</label><span>：</span>
-              <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key]" type="number" />
-              <input v-else v-model="optionData[item.key]"/>
-            </div>
-            <!-- 如果是array-text类型 -->
-            <div v-else-if="item.type == 'array-text'" class="item-option-nav">
-              <label :title="item.text">{{item.text}}</label><span>：</span>
-              <div class="item-option-array" v-for="(v,i) in optionData[item.key]" :key="i">
-                <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key][i]" type="number" />
-                <input v-else v-model.number="optionData[item.key][i]" />
-                <span class="array-set" v-if="((optionData[item.key].length != 1 && i == 0) || i != 0) && i != optionData[item.key].length - 1" @click="delOptionArr(item.key, i)">删除</span>
-                <span class="array-set" v-if="optionData[item.key].length == 1 || i == optionData[item.key].length - 1" @click="addOptionArr(item.key, index)">增加</span>
-              </div>
-            </div>
-            <!-- 如果是array-object类型 -->
-            <div v-else-if="item.type == 'array-object'" class="item-option-nav">
-              <label :title="item.text">{{item.text}}</label><span>：</span>
-              <div class="item-option-array" v-for="(v,i) in optionData[item.key]" :key="i">
-                <input v-if="item.dataType == 'number'" v-model.number="optionData[item.key][i]" type="number" />
-                <input v-else v-model.number="optionData[item.key][i]" />
-                <span class="array-set" v-if="((optionData[item.key].length != 1 && i == 0) || i != 0) && i != optionData[item.key].length - 1" @click="delOptionArr(item.key, i)">删除</span>
-                <span class="array-set" v-if="optionData[item.key].length == 1 || i == optionData[item.key].length - 1" @click="addOptionArr(item.key, index)">增加</span>
-              </div>
-            </div>
-            <OptionObject v-else-if="item.type == 'object'" :option="item"></OptionObject>
+            <OptionText v-if="item.type == 'text'" :option="item" :ref="item.type + index"></OptionText>
+            <OptionArray v-else-if="item.type.indexOf('array-') >= 0" :option="item" :ref="item.type + index"></OptionArray>
+            <OptionObject v-else-if="item.type == 'object'" :option="item" :ref="item.type + index"></OptionObject>
+            <hr v-else-if="item.type == 'separator'" />
           </div>
         </div>
         <div class="item-option-foot" v-if="showOption">
@@ -48,11 +25,15 @@
 
 <script>
 import listDatas from "@/components/resources/list";
-import OptionObject from '@/components/framework/option/option-object';
+import OptionText from '@/components/framework/option/text';
+import OptionArray from '@/components/framework/option/array';
+import OptionObject from '@/components/framework/option/object';
 import { setTimeout } from 'timers';
 export default {
   name: "Option",
   components: {
+    OptionText,
+    OptionArray,
     OptionObject
   },
   created: function() {
@@ -95,11 +76,9 @@ export default {
         this.optionItem = void 0;
         this.optionData = {}
         return
-      } else { // 选择组件，则将组件中的配置项克隆出来。一是为了不影响初始配置项的设置，二是方便回退配置项
-        this.optionItem = this.$util.deepClone(this.listDatas[val]);
+      } else { // 选择组件，组件中的配置项
+        this.optionItem = this.listDatas[val];
       }
-      // 初始化数据
-      this.initOption()
     }
   },
   methods: {
@@ -123,7 +102,7 @@ export default {
       this.showDesc = false;
       this.showOption = true;
     },
-    // 添加模块并用默认数据配置
+    // 添加模块并用默认数据配置（无用）
     addDefaultComp (name) {
       console.log('添加', name, '组件')
       this.compName = name;
@@ -131,44 +110,37 @@ export default {
         this.$util.bus.$emit('board_add_item', {type: name, value: this.optionData})
       })
     },
-    // 连续输入框后面的删除按钮
-    delOptionArr (key, i) {
-      this.optionData[key].splice(i, 1)
-    },
-    // 连续输入框后面的增加按钮
-    addOptionArr (key, index) {
-      this.optionData[key].push(this.optionItem.option.data[index].default)
-    },
     // 点击应用组件数据
     applyOption () {
+      let index = -1, obj = {}, err = false
+      for (let i in this.optionItem.option.data) {
+        index++
+        let option = this.optionItem.option.data[i]
+        if (option.type == 'separator') {
+          // 修饰符不是一个输入数据，跳过
+          continue
+        }
+        let optionData = this.$refs[option.type + index][0].optData()
+        if (optionData === 'validation false') {
+          // 说明输入有报错
+          alert(option.text + ' 配置输入有误！')
+          err = true
+          break
+        }
+        obj[option.key] = optionData
+      }
+      if (err) {return}
+      this.optionData = obj
       console.log('应用组件数据', this.optionData);
       this.$util.bus.$emit('board_update_item', {type: this.compName, value: this.optionData})
     },
     // 点击初始化组件数据
     resetOption () {
-      this.initOption();
-    },
-    // 初始化数据
-    initOption () {
-      this.optionItem = this.$util.deepClone(this.listDatas[this.compName]);
-      let obj = {}
-      for(let k = 0; k < this.optionItem.option.data.length; k++ ) {
-        let val
-        switch(this.optionItem.option.data[k].type) {
-          case 'text': 
-            val = this.optionItem.option.data[k].default
-            break
-          case 'array-text':
-            val = [this.optionItem.option.data[k].default]
-            break
-          default:
-            val = ''
-        }
-        obj[this.optionItem.option.data[k].key] = val
-      }
-      this.optionData = obj
-      console.log('组件配置项', this.optionItem);
-      console.log('组件初始化数据', this.optionData);
+      console.log('重置', this.compName, '组件')
+      this.optionItem = void 0
+      this.$nextTick(() => {
+        this.optionItem = this.listDatas[this.compName]
+      })
     }
   }
 };
@@ -279,5 +251,11 @@ export default {
 }
 .item-option-nav .item-option-array input {
   width: 200px;
+}
+hr {
+  margin: 0 10px;
+  background: #ddd;
+  border: none;
+  height: 1px;
 }
 </style>

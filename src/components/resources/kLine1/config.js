@@ -14,6 +14,7 @@ const config = {
    * 一、单输入框
    * 1、文本输入框（text）
    * 2、下拉列表框（select）
+   * 3、对象输入框（object）
    * 二、连续输入框（可以连续添加多组相同的输入框）
    * 1、连续输入框（array-text）（“-”后面的内容是单输入框的type）
    * 三、修饰符
@@ -32,8 +33,11 @@ const config = {
         mustRequired: true // 是否必填
       },
       {
+        type: 'separator',
+      },
+      {
         key: 'successCode', // 接收的字段名（必传）
-        type: 'object', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array:连续输入的复杂数据;object:对象数据）（必传）
+        type: 'object', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
         dataType: 'object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
         text: '选股数据', // 显示的选项名称（必传）
         default: '', // 默认填充的文本（必传）
@@ -84,7 +88,7 @@ const config = {
   initData: [{ // 初始化组件时需要调用的方法
     name: 'initComponent', // 方法名
     params: [{ // 传递的参数（注意是按顺序的）
-      validation: '/^\d{6}$/', // 校验输入内容的正则或者function(val){}
+      validation: /^\d{6}$/, // 校验输入内容的正则或者function(val){}
       description: '股票代码', // 介绍说明
       mustRequired: true, // 是否必传
     }],
@@ -95,7 +99,7 @@ const config = {
     {
       name: 'code', // 接收数据的字段名
       default: '', // 默认值，即接收值检验出错时使用
-      validation: '/^\d{6}$/', // 接收值校验，规则同上方配置项中的数据校验
+      validation: /^\d{6}$/, // 接收值校验，规则同上方配置项中的数据校验
       description: '股票代码' // 介绍说明
     }
   ],
