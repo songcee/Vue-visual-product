@@ -22,19 +22,19 @@ const config = {
    */
   option: { // 放到option的数据配置项
     data: [ // 数据集
-      {
-        key: 'code',
-        type: 'text',
-        dataType: 'string',
-        text: '股票代码',
-        default: '000567',
-        validation: 'stockcode',
-        description: '股票代码', // 介绍说明
-        mustRequired: true // 是否必填
-      },
-      {
-        type: 'separator',
-      },
+      // {
+      //   key: 'code',
+      //   type: 'text',
+      //   dataType: 'string',
+      //   text: '股票代码',
+      //   default: '000567',
+      //   validation: 'hs_code',
+      //   description: '股票代码', // 介绍说明
+      //   mustRequired: true // 是否必填
+      // },
+      // {
+      //   type: 'separator',
+      // },
       {
         key: 'successCode', // 接收的字段名（必传）
         type: 'object', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
@@ -48,7 +48,7 @@ const config = {
             dataType: 'string',
             text: '股票代码',
             default: '000567',
-            validation: 'stockcode',
+            validation: 'hs_code',
             description: '股票代码', // 介绍说明
             mustRequired: true // 是否必填
           },{
@@ -74,7 +74,7 @@ const config = {
             type: 'text',
             dataType: 'string',
             text: '顶部的文案',
-            default: '',
+            default: '自选出以来，涨幅为xxx%',
             validation: '',
             description: '组件顶部的文案', // 介绍说明
             mustRequired: true // 是否必填

@@ -40,7 +40,7 @@ export default {
     this.$util.bus.$on('board_updateModule', (data) => { // 更新页面模块划分
       this.updateModule(data)
     })
-    this.$util.bus.$on('board_add_item', (data) => { // 设置模块中的组件
+    this.$util.bus.$on('board_add_item', (data) => { // 设置模块中的组件（无用）
       console.log('选中页面中模块的索引：',this.productModules.editIndex, '组件的基础数据：', data)
       if (this.productModules.editIndex == -1) {
         alert('请先选择需要添加的模块！')
@@ -61,6 +61,7 @@ export default {
       this.$store.commit('product_set_components', {index: this.productModules.editIndex, value: data})
       // 通知模块中对应位置的组件更新数据
       this.$util.bus.$emit('module_update_comp', {index: this.productModules.editIndex, value: data})
+      console.log('目前项目信息：', this.$store.state.product)
     })
   },
   data () {

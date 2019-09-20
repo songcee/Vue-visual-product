@@ -8,6 +8,7 @@
         <div class="item-option-banner" v-if="showOption && optionItem">
           <div v-for="(item, index) in optionItem.option.data" :key="index">
             <OptionText v-if="item.type == 'text'" :option="item" :ref="item.type + index"></OptionText>
+            <OptionSelect v-else-if="item.type == 'select'" :option="item" :ref="item.type + index"></OptionSelect>
             <OptionArray v-else-if="item.type.indexOf('array-') >= 0" :option="item" :ref="item.type + index"></OptionArray>
             <OptionObject v-else-if="item.type == 'object'" :option="item" :ref="item.type + index"></OptionObject>
             <hr v-else-if="item.type == 'separator'" />
@@ -26,6 +27,7 @@
 <script>
 import listDatas from "@/components/resources/list";
 import OptionText from '@/components/framework/option/text';
+import OptionSelect from '@/components/framework/option/select';
 import OptionArray from '@/components/framework/option/array';
 import OptionObject from '@/components/framework/option/object';
 import { setTimeout } from 'timers';
@@ -33,6 +35,7 @@ export default {
   name: "Option",
   components: {
     OptionText,
+    OptionSelect,
     OptionArray,
     OptionObject
   },

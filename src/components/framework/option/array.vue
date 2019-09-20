@@ -6,6 +6,7 @@
         <template v-if="arrayData.length">
           <div class="item-option-array" v-for="(v,index) in arrayData" :key="index">
             <OptionText v-if="option.type == 'array-text'" :option="option" :ref="'array-text' + index"></OptionText>
+            <OptionSelect v-else-if="option.type == 'array-select'" :option="option" :ref="option.type + index" class="item-option-object-nav"></OptionSelect>
             <span class="array-del vp-btn" v-if="((arrayData.length != 1 && index == 0) || index != 0) && index != arrayData.length - 1" @click="delOptionArr(index)">删除</span>
           </div>
         </template>
@@ -15,10 +16,12 @@
 <script>
 // import validations from '@/global/validation.js'
 import OptionText from '@/components/framework/option/text';
+import OptionSelect from '@/components/framework/option/select';
 export default {
   name: "Option-Array",
   components: {
     OptionText,
+    OptionSelect
   },
   created: function() {
   },
@@ -53,7 +56,7 @@ export default {
     optData () {
       let ret = []
       for (let i in this.arrayData) {
-        let d = this.$refs['array-text' + i][0].optData()
+        let d = this.$refs[this.option.type + i][0].optData()
         if (d === 'validation false') {
           // 说明输入有报错
           alert(this.option.text + ' 配置输入有误！')

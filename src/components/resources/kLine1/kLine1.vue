@@ -1,21 +1,19 @@
 <template>
-  <div id="kLinePopup">
+  <div id="kLinePopup" style="width: 100%; height: 100%;">
     <div class="title">
         <p class="title-content1">
             <span class="title-name">个股案例</span>
             <span class="title-stock">{{successCode['code'] + '  ' + successCode['name']}}</span>
         </p>
         <p class="title-content2">
-            <span class="title-dsc">{{successCode.time + '选出  ，' + successCode.top + '%'}}</span>
+            <span class="title-dsc">{{successCode.time + '选出  ' + (successCode.top ? '，' + successCode.top : '')}}</span>
         </p>
     </div>
-    <div style="width:700px;height:calc(400px - 48px);background:rgba(25, 25, 27, 1)" id="KlinePopchart"></div>
+    <div style="width:100%;height:calc(100% - 53px);background:rgba(25, 25, 27, 1)" id="KlinePopchart"></div>
   </div>
 </template>
 <script>
-// import axios from "@/function/request";
 import axios from "axios";
-// import _ from '@/function/function'
 export default {
   name: "kLinePopup",
   props:['successCode'],
@@ -30,15 +28,9 @@ export default {
       markPointData: [],
     }
   },
-  computed: {
-    // successCode(){
-    //     return this.$store.state.alldata.successCode
-    // },
-  },
   watch: {
     successCode(val,oldval){
       if(val['code']){
-        // this.starChart()
         this.getZhibiao()
       }
     }
@@ -937,39 +929,6 @@ export default {
                     $seriesIndex: 9,
                     enableSelect: false,
                     data:s.markPointData,
-                    // data: [{
-                    //     symbol: {
-                    //         type: 'none',
-                    //     },
-                    //     label: {
-                    //         normal: {
-                    //             show: true,
-                    //             style: {
-                    //                 fill: 'rgb(204,0,204)'
-                    //             },
-                    //             formatter: (d) => {
-                    //                 return '升'
-                    //             }
-                    //         },
-                    //     },
-                    //     xValue: '20190710'
-                    // }, {
-                    //     symbol: {
-                    //         type: 'none',
-                    //     },
-                    //     label: {
-                    //         normal: {
-                    //             show: true,
-                    //             style: {
-                    //                 fill: 'rgb(204,0,204)'
-                    //             },
-                    //             formatter: (d) => {
-                    //                 return '底'
-                    //             }
-                    //         },
-                    //     },
-                    //     type: 'min'
-                    // }]
                 }],
                 animation: false,
                 data: [{
@@ -1008,6 +967,9 @@ export default {
     this.chart = D3Charts.init("KlinePopchart");
     // this.starChart()
     this.getZhibiao()
+    window.addEventListener('resize',(e) => {
+        this.chart.resize()
+    })
   }
 };
 </script>
@@ -1032,6 +994,7 @@ export default {
         line-height:23px;
     }
 
+    .title-dsc,
     .title-name{
         color: #f9f9f9;
         font-size: 14px;

@@ -4,16 +4,19 @@
         <p class="item-option-object-title">{{option.text}}</p>
         <div v-for="(item, index) in option.objectOptions" :key="index">
             <OptionText v-if="item.type == 'text'" :option="item" :ref="item.type + index" class="item-option-object-nav"></OptionText>
+            <OptionSelect v-else-if="item.type == 'select'" :option="item" :ref="item.type + index" class="item-option-object-nav"></OptionSelect>
         </div>
     </div>
 </template>
 
 <script>
-import OptionText from './text';
+import OptionText from '@/components/framework/option/text';
+import OptionSelect from '@/components/framework/option/select';
 export default {
   name: "Option-Object",
   components: {
-      OptionText
+      OptionText,
+      OptionSelect
   },
   props: ['option'],
   data() {

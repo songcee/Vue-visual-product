@@ -70,3 +70,16 @@
 .vp-error {
   border: 1px solid #F56C6C;
 }
+
+/* option模块的公共样式 */
+.item-option-nav label {
+  position: relative;
+}
+/* 必选框中label前的星号 */
+.item-option-nav label.mustRequired::before {
+  content: '*';
+  color: red;
+  position: absolute;
+  left: -7px;
+}
+/* option模块的公共样式结束 */
