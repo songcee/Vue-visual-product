@@ -22,19 +22,19 @@ const config = {
    */
   option: { // 放到option的数据配置项
     data: [ // 数据集
-      {
-        key: 'code',
-        type: 'text',
-        dataType: 'string',
-        text: '股票代码',
-        default: '000567',
-        validation: 'stockcode',
-        description: '股票代码', // 介绍说明
-        mustRequired: true // 是否必填
-      },
-      {
-        type: 'separator',
-      },
+      // {
+      //   key: 'code',
+      //   type: 'text',
+      //   dataType: 'string',
+      //   text: '股票代码',
+      //   default: '000567',
+      //   validation: 'hs_code',
+      //   description: '股票代码', // 介绍说明
+      //   mustRequired: true // 是否必填
+      // },
+      // {
+      //   type: 'separator',
+      // },
       {
         key: 'successCode', // 接收的字段名（必传）
         type: 'object', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
@@ -48,7 +48,7 @@ const config = {
             dataType: 'string',
             text: '股票代码',
             default: '000567',
-            validation: 'stockcode',
+            validation: 'hs_code',
             description: '股票代码', // 介绍说明
             mustRequired: true // 是否必填
           },{
@@ -74,7 +74,7 @@ const config = {
             type: 'text',
             dataType: 'string',
             text: '顶部的文案',
-            default: '',
+            default: '自选出以来，涨幅为xxx%',
             validation: '',
             description: '组件顶部的文案', // 介绍说明
             mustRequired: true // 是否必填
@@ -103,30 +103,16 @@ const config = {
       description: '股票代码' // 介绍说明
     }
   ],
-  outData: [ // 输出数据
-    {
-      name: 'zdf', // 输出数据的字段名
-      description: '个股的涨跌幅', // 字段描述，用于调用者阅读理解
-      type: 'string' // 数据类型
-    }
-  ],
-  inFunc: [ // 接收的方法，即可供外部调用的方法
-    {
+  inFunc: { // 接收的方法，即可供外部调用的方法
+    'changeCode': {
       name: 'changeCode', // 方法名
-      params: ['code'], // 方法的参数名
+      params: [{
+        name: 'code', // 参数名
+        description: '股票代码', // 介绍说明
+        mustRequired: true // 是否必填
+      }], // 方法的参数名
       description: '修改股票代码的时候调动的方法' // 介绍说明
     }
-  ],
-  outFunc: [ // 输出的方法，即用于定义外部的方法
-    {
-      name: 'dblclick', // 方法名
-      params: [{ // 方法中会带有的参数
-        name: 'code', // 参数名称
-        type: 'string', // 数据格式
-        description: '股票代码' // 介绍说明
-      }],
-      description: '双击股票名称时会调用这个方法' // 介绍说明
-    }
-  ]
+  }
 }
 export default config

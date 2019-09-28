@@ -32,21 +32,20 @@ const config = {
         mustRequired: false // 是否必填（必传）
       },
       {
+        type: 'separator', // 分割线
+      },{
         key: 'type', // 接收的字段名（必传）
         type: 'select', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
         dataType: 'string', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
-        text: '默认展示状态', // 显示的选项名称（必传）
-        select: [ // 下拉框的内容（type=select或者array-select时必传）
-          {
-            text: '分时图', // （必传）
-            value: 'share-line' // （必传）
-          }, {
-            text: 'K线图',
-            value: 'k-line'
-          }
+        text: '显示的选项名称', // 显示的选项名称（必传）
+        default: 'null', // 默认填充的文本（必传）
+        selectData: [
+          {value: 'null', text: '空'},
+          {value: '1', text: '第一个选项'},
+          {value: '2', text: '第二个选项'},
+          {value: '3', text: '第三个选项'}
         ],
-        default: 'share-line', // （必传）
-        description: '股票代码', // 介绍说明（必传）
+        description: '测试select类型的配置项', // 介绍说明（必传）
         mustRequired: false // 是否必填（必传）
       },
       {
@@ -128,17 +127,21 @@ const config = {
       type: 'string' // 数据类型
     }
   ],
-  inFunc: [ // 接收的方法，即可供外部调用的方法
-    {
+  inFunc: { // 接收的方法，即可供外部调用的方法
+    'changeCode': {
       name: 'changeCode', // 方法名
-      params: ['code'], // 方法的参数名
+      params: [{
+        name: 'code', // 参数名
+        description: '股票代码', // 介绍说明
+        mustRequired: true // 是否必填
+      }], // 方法的参数名
       description: '修改股票代码的时候调动的方法' // 介绍说明
     }
-  ],
-  outFunc: [ // 输出的方法，即用于定义外部的方法
+  },
+  outFunc: [ // 输出的方法，即用于调用外部方法
     {
       name: 'dblclick', // 方法名
-      params: [{ // 方法中会带有的参数
+      params: [{ // 可用参数，即可供外部方法使用的参数
         name: 'code', // 参数名称
         type: 'string', // 数据格式
         description: '股票代码' // 介绍说明

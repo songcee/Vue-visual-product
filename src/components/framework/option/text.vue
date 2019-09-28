@@ -1,7 +1,10 @@
 <!-- 组件配置项的配置UI组件 -->
 <template>
     <div class="item-option-nav">
-        <label v-if="option.type == 'text'" :title="option.text">{{option.text}}：</label>
+        <label 
+          v-if="option.type == 'text'"
+          :title="option.text"
+          :class="{'mustRequired': option.mustRequired}">{{option.text}}：</label>
         <input 
           v-model="inputData"
           :type="option.dataType.indexOf('number') >= 0 ? 'number' : 'text'"
@@ -63,7 +66,11 @@ export default {
   methods: {
     optData () {
       if (this.validation) {
-        return this.inputData
+        if (this.option.dataType.indexOf('number') >= 0) {
+          return parseFloat(this.inputData)
+        } else {
+          return this.inputData
+        }
       } else {
         // 数据校验不通过统一返回这个
         return 'validation false'
@@ -77,6 +84,6 @@ export default {
 <style scoped>
 /* 当是数组中连续的input，给输入框加宽度 */
 .arrayWidth {
-  width: 230px;
+  width: 220px;
 }
 </style>
