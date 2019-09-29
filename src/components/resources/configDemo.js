@@ -127,17 +127,21 @@ const config = {
       type: 'string' // 数据类型
     }
   ],
-  inFunc: [ // 接收的方法，即可供外部调用的方法
-    {
+  inFunc: { // 接收的方法，即可供外部调用的方法
+    'changeCode': {
       name: 'changeCode', // 方法名
-      params: ['code'], // 方法的参数名
+      params: [{
+        name: 'code', // 参数名
+        description: '股票代码', // 介绍说明
+        mustRequired: true // 是否必填
+      }], // 方法的参数名
       description: '修改股票代码的时候调动的方法' // 介绍说明
     }
-  ],
-  outFunc: [ // 输出的方法，即用于定义外部的方法
+  },
+  outFunc: [ // 输出的方法，即用于调用外部方法
     {
       name: 'dblclick', // 方法名
-      params: [{ // 方法中会带有的参数
+      params: [{ // 可用参数，即可供外部方法使用的参数
         name: 'code', // 参数名称
         type: 'string', // 数据格式
         description: '股票代码' // 介绍说明

@@ -84,6 +84,6 @@ export default {
 <style scoped>
 /* 当是数组中连续的input，给输入框加宽度 */
 .arrayWidth {
-  width: 230px;
+  width: 220px;
 }
 </style>

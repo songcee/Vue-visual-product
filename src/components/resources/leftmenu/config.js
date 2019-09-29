@@ -23,47 +23,15 @@ const config = {
         }
       ]
     },
-    initData: [{ // 初始化组件时需要调用的方法
-      name: 'initComponent', // 方法名
-      params: [{ // 传递的参数（注意是按顺序的）
-        validation: /^\d{6}$/, // 校验输入内容的正则或者function(val){}
-        description: '股票代码', // 介绍说明
-        mustRequired: true, // 是否必传
-      }],
-      description: '股票代码', // 介绍说明
-      mustRequired: true // 是否必填
-    }],
-    inData: [ // 接收的数据
-      {
-        name: 'code', // 接收数据的字段名
-        default: '', // 默认值，即接收值检验出错时使用
-        validation: /^\d{6}$/, // 接收值校验，规则同上方配置项中的数据校验
-        description: '股票代码' // 介绍说明
-      }
-    ],
-    outData: [ // 输出数据
-      {
-        name: 'zdf', // 输出数据的字段名
-        description: '个股的涨跌幅', // 字段描述，用于调用者阅读理解
-        type: 'string' // 数据类型
-      }
-    ],
-    inFunc: [ // 接收的方法，即可供外部调用的方法
-      {
-        name: 'changeCode', // 方法名
-        params: ['code'], // 方法的参数名
-        description: '修改股票代码的时候调动的方法' // 介绍说明
-      }
-    ],
-    outFunc: [ // 输出的方法，即用于定义外部的方法
+    outFunc: [ // 输出的方法，即用于调用外部方法
       {
         name: 'chooseCode', // 方法名
-        params: [{ // 方法中会带有的参数
+        params: [{ // 可用参数，即可供外部方法使用的参数
           name: 'code', // 参数名称
           type: 'string', // 数据格式
           description: '股票代码' // 介绍说明
         }],
-        description: '点击列表时会调用的方法' // 介绍说明
+        description: '点击选中股票时可用调用外部的方法' // 介绍说明
       }
     ]
   }

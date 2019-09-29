@@ -33,7 +33,6 @@ export default {
     };
   },
   mounted () {
-    console.log(this.option)
     if (this.option.default) {
       this.arrayData.push(this.option.default)
     } else {

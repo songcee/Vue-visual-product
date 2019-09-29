@@ -103,30 +103,16 @@ const config = {
       description: '股票代码' // 介绍说明
     }
   ],
-  outData: [ // 输出数据
-    {
-      name: 'zdf', // 输出数据的字段名
-      description: '个股的涨跌幅', // 字段描述，用于调用者阅读理解
-      type: 'string' // 数据类型
-    }
-  ],
-  inFunc: [ // 接收的方法，即可供外部调用的方法
-    {
+  inFunc: { // 接收的方法，即可供外部调用的方法
+    'changeCode': {
       name: 'changeCode', // 方法名
-      params: ['code'], // 方法的参数名
+      params: [{
+        name: 'code', // 参数名
+        description: '股票代码', // 介绍说明
+        mustRequired: true // 是否必填
+      }], // 方法的参数名
       description: '修改股票代码的时候调动的方法' // 介绍说明
     }
-  ],
-  outFunc: [ // 输出的方法，即用于定义外部的方法
-    {
-      name: 'dblclick', // 方法名
-      params: [{ // 方法中会带有的参数
-        name: 'code', // 参数名称
-        type: 'string', // 数据格式
-        description: '股票代码' // 介绍说明
-      }],
-      description: '双击股票名称时会调用这个方法' // 介绍说明
-    }
-  ]
+  }
 }
 export default config
