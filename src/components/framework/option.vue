@@ -6,7 +6,7 @@
         <p class="item-title" :title="listDatas[compName].title.text">{{listDatas[compName].title.text}}</p>
         <div class="item-desc-banner" v-if="showDesc" v-html="listDatas[compName].description"></div>
         <div class="item-container" v-if="showOption && optionItem">
-          <div class="item-option-container">
+          <div class="item-option-container" v-if="optionItem.option && optionItem.option.data && optionItem.option.data.length > 0">
             <p class="item-option-container-title">组件配置项</p>
             <div v-for="(item, index) in optionItem.option.data" :key="'option'+index">
               <OptionText v-if="item.type == 'text'" :option="item" :ref="item.type + index"></OptionText>
@@ -18,38 +18,7 @@
           </div>
           <div class="item-option-container" v-if="optionItem.outFunc && optionItem.outFunc.length > 0">
             <p class="item-option-container-title">触发外部组件的逻辑</p>
-            <div class="item-option-outfun-banner" v-for="(item, index) in optionItem.outFunc" :key="'outfun'+index">
-              <p>{{index + 1}}、{{item.description}}</p>
-              <div class="outfun-option">
-                <p>选择调用的组件：</p>
-                <select v-model="outFunData.components">
-                  <option value="null">--请选择--</option>
-                  <option
-                    v-for="(v, i) in $store.state.product.components"
-                    :key="'comp'+i"
-                    :value="v.type"
-                    v-show="v.type !== compName">
-                    {{v.name}}
-                  </option>
-                </select>
-                <p v-if="outFunData.components != 'null'">选择组件的方法：</p>
-                <select v-model="outFunData.funcName" v-if="outFunData.components != 'null'">
-                  <option value="null">--请选择--</option>
-                  <option
-                    v-for="(v, i) in listDatas[outFunData.components].inFunc"
-                    :key="'func'+i"
-                    :value="v.name">
-                    {{v.description}}--{{v.name}}
-                  </option>
-                </select>
-                <p v-if="outFunData.components != 'null' && outFunData.funcName != 'null'">选择方法需要的参数：</p>
-                <div v-if="outFunData.components != 'null' && outFunData.funcName != 'null'">
-                  <div v-for="(v, i) in listDatas[outFunData.components].inFunc[outFunData.funcName].params" :key="'params'+i">
-                    <p>{{i + 1}}、{{v.description}}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <OptionOutFunc :option="optionItem.outFunc" :compName="compName" :ref="'outFunc'"></OptionOutFunc>
           </div>
         </div>
         <div class="item-option-foot" v-if="showOption">
@@ -68,6 +37,7 @@ import OptionText from '@/components/framework/option/text';
 import OptionSelect from '@/components/framework/option/select';
 import OptionArray from '@/components/framework/option/array';
 import OptionObject from '@/components/framework/option/object';
+import OptionOutFunc from '@/components/framework/option/outfunc';
 import { setTimeout } from 'timers';
 export default {
   name: "Option",
@@ -75,14 +45,14 @@ export default {
     OptionText,
     OptionSelect,
     OptionArray,
-    OptionObject
+    OptionObject,
+    OptionOutFunc
   },
   created: function() {
     this.$util.bus.$on("option_show_desc", name => {
       this.showModuleDesc(name);
     });
     this.$util.bus.$on("option_show_option", name => {
-      console.log(this.$store.state.product.components)
       this.showModuleOption(name);
     });
     this.$util.bus.$on("option_add_default_comp", name => {
@@ -100,16 +70,11 @@ export default {
       simpleOption: ["text", "select"], // 单输入框
       multipleOption: ["array-text", "array-select"], // 连续输入框
       decorateOption: ["separator"], // 修饰符
-      optionData: {}, // 组件配置项
-      outFunData: { // 触发外部组件的数据
-        components: 'null', // 组件名称
-        funcName: 'null', // 方法名称
-        parameter: [], // 参数
-      }
+      // optionData: {}, // 组件所有配置项数据
     };
   },
   computed: {
-    handlerExpend() {
+    handlerExpend() { // 模块收缩、展开控制
       return this.$store.state.handler.allExpend;
     }
   },
@@ -120,11 +85,11 @@ export default {
     compName(val) {
       if (val == -1) { // 如果未选择组件，则返回
         this.optionItem = void 0;
-        this.optionData = {}
+        // this.optionData = {}
         return
       } else { // 选择组件，组件中的配置项
         console.log('选择', val, '组件')
-        this.optionItem = this.listDatas[val];
+        this.optionItem = this.$util.deepClone(this.listDatas[val])
       }
     }
   },
@@ -146,6 +111,9 @@ export default {
     // 显示模块配置项
     showModuleOption(name) {
       this.compName = -1;
+      if (name == -1) {
+        return;
+      }
       this.$nextTick(() => {
         this.compName = name;
         this.showDesc = false;
@@ -153,36 +121,65 @@ export default {
       })
     },
     // 添加模块并用默认数据配置（无用）
-    addDefaultComp (name) {
-      console.log('添加', name, '组件')
-      this.compName = name;
-      setTimeout(() => {
-        this.$util.bus.$emit('board_add_item', {type: name, value: this.optionData})
-      })
-    },
+    // addDefaultComp (name) {
+    //   console.log('添加', name, '组件')
+    //   this.compName = name;
+    //   setTimeout(() => {
+    //     this.$util.bus.$emit('board_add_item', {type: name, value: this.optionData})
+    //   })
+    // },
     // 点击应用组件数据
     applyOption () {
-      let index = -1, obj = {}, err = false
-      for (let i in this.optionItem.option.data) {
-        index++
-        let option = this.optionItem.option.data[i]
-        if (option.type == 'separator') {
-          // 修饰符不是一个输入数据，跳过
-          continue
+      let data = this.getOptionData() // 获取组件中所有配置项的数据
+      if (!data) {return}
+      // this.optionData = data
+      console.log('应用组件数据', data)
+      window.info('应用组件成功！')
+      // 将数据保存进store并在board上绘制
+      this.$util.bus.$emit('board_update_item', {
+        type: this.compName,
+        name: this.listDatas[this.compName].title.text,
+        option: data.optionData,
+        outFunc: data.outFuncData
+      })
+      // 将option和list里的状态恢复初始化
+      this.$store.commit("handler_list_chosen", -1)
+      this.compName = -1
+    },
+    // 获取组件中所有配置项的数据
+    getOptionData () {
+      let data = {}
+      // 配置项数据
+      if (this.optionItem.option && this.optionItem.option.data && this.optionItem.option.data.length > 0) {
+        let index = -1, optionObj = {}
+        for (let i in this.optionItem.option.data) {
+          index++
+          let option = this.optionItem.option.data[i]
+          if (option.type == 'separator') {
+            // 修饰符不是一个输入数据，跳过
+            continue
+          }
+          let optionData = this.$refs[option.type + index][0].optData()
+          if (optionData && optionData.err === 'validation false') {
+            // 说明输入有报错
+            alert(optionData.errmsg)
+            return false
+          }
+          optionObj[option.key] = optionData
         }
-        let optionData = this.$refs[option.type + index][0].optData()
-        if (optionData === 'validation false') {
-          // 说明输入有报错
-          alert(option.text + ' 配置输入有误！')
-          err = true
-          break
-        }
-        obj[option.key] = optionData
+        data.optionData = optionObj
       }
-      if (err) {return}
-      this.optionData = obj
-      console.log('应用组件数据', this.optionData);
-      this.$util.bus.$emit('board_update_item', {type: this.compName, name: this.listDatas[this.compName].title.text, value: this.optionData})
+      // 组件交互数据
+      if (this.optionItem.outFunc && this.optionItem.outFunc.length > 0) {
+        let outFuncData = this.$refs.outFunc.optData()
+        if (outFuncData.err === 'validation false') {
+          // 说明输入有报错
+          alert(outFuncData.errmsg)
+          return false
+        }
+        data.outFuncData = outFuncData
+      }
+      return data
     },
     // 点击初始化组件数据
     resetOption () {
@@ -196,12 +193,6 @@ export default {
     resetAllData () {
       // 重置组件配置项
       this.optionItem = this.listDatas[this.compName]
-      // 重置触发外部组件的逻辑
-      this.outFunData = {
-        components: 'null',
-        funcName: 'null',
-        parameter: [],
-      }
     }
   }
 };
@@ -287,16 +278,6 @@ export default {
   padding: 0 5px;
   font-size: 14px;
   color: #666;
-}
-.item-option-outfun-banner>p {
-  line-height: 30px;
-}
-.outfun-option {
-  padding-left: 20px;
-}
-.outfun-option select {
-  width: 100%;
-  height: 21px;
 }
 .item-option-foot {
   position: absolute;

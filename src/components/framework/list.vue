@@ -11,6 +11,7 @@
           @click="optionItem(index)"
           @mouseenter="toggleItemHandler(index, true)"
           @mouseleave="toggleItemHandler(index, false)"
+          :class="{'choose': choose == index}"
         >
           <p class="list-item-text">{{item.title.text}}</p>
           <div class="list-item-handle" :class="[item.handler?'show':'hide']">
@@ -38,6 +39,7 @@ export default {
     return {
       expand: true,
       listDatas: listDatas, // 组件列表数据
+      choose: -1, // 列表中选中的组件
     }
   },
   mounted () {
@@ -49,19 +51,43 @@ export default {
     productModules () { // 项目模块的划分方式
       return this.$store.state.product.modules.moduleIndex
     },
-    handlerExpend() {
+    handlerExpend() { // 模块收缩、展开控制
       return this.$store.state.handler.allExpend;
+    },
+    listChosen() { // 点击选中模块
+      return this.$store.state.handler.listChosen;
     }
   },
   watch: {
     handlerExpend (val) {
       this.toggleHandler(val)
+    },
+    listChosen (val) { // val 表示选中模块的索引
+      if (val == -1) {
+        this.choose = -1
+        return
+      }
+      let compData = this.$store.state.product.components[val]
+      if (compData) {
+        // 说明模块中有组件
+        // list中选中该组件
+        this.choose = compData.type
+        // @todo option中显示组件的配置项
+      } else {
+        this.choose = -1
+      }
     }
   },
   methods: {
     // 设置组件参数
     optionItem (name) {
-      this.$util.bus.$emit('option_show_option', name)
+      if (this.choose == name) {
+        this.choose = -1
+        this.$util.bus.$emit('option_show_option', -1)
+      } else {
+        this.choose = name
+        this.$util.bus.$emit('option_show_option', name)
+      }
     },
     // 查看组件介绍
     descItem (name) {
@@ -153,6 +179,9 @@ export default {
 }
 .list-item:hover {
   background: #f3f3f3;
+}
+.list-item.choose {
+  background: #ededed;
 }
 .list-item-text {
   text-overflow: ellipsis;

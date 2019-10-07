@@ -8,7 +8,8 @@
         <component
           v-if="componentData[0]"
           :is="componentData[0].type"
-          v-bind="componentData[0].value"
+          v-bind="componentData[0].option"
+          :ref="componentData[0].type"
         ></component>
       </template>
     </div>
@@ -23,7 +24,8 @@
         <component
           v-if="componentData[1]"
           :is="componentData[1].type"
-          v-bind="componentData[1].value"
+          v-bind="componentData[1].option"
+          :ref="componentData[1].type"
         ></component>
       </template>
     </div>
@@ -38,7 +40,8 @@
         <component
           v-if="componentData[2]"
           :is="componentData[2].type"
-          v-bind="componentData[2].value"
+          v-bind="componentData[2].option"
+          :ref="componentData[2].type"
         ></component>
       </template>
     </div>
@@ -51,11 +54,8 @@ export default {
   props: ["formate"],
   mounted() {
     // 每个模块的公用方法，可以复制到每个模块控制器中去
-    console.log("选择第二种模块划分方式");
-    this.$util.bus.$on('module_update_comp', (data) => {
-      // 更新模块中组件的数据
-      this.$set(this.componentData, data.index, this.$util.deepClone(data.value))
-    })
+    console.log("选择第十二种模块划分方式")
+    this.$util.moduleUpdateComp(this)
     // 每个模块的公用方法结束
   },
   computed: {
@@ -77,9 +77,9 @@ export default {
     // 选中要编辑的模块，颜色变红
     chooseModule (index) {
       if (this.editIndex == index) {
-        this.$store.commit('product_set_editIndex', -1)
+        this.$util.chooseModule(this, -1)
       } else {
-        this.$store.commit('product_set_editIndex', index)
+        this.$util.chooseModule(this, index)
       }
     }
     // 每个模块的公用方法结束

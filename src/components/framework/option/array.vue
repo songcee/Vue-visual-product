@@ -56,10 +56,10 @@ export default {
       let ret = []
       for (let i in this.arrayData) {
         let d = this.$refs[this.option.type + i][0].optData()
-        if (d === 'validation false') {
+        if (d && d.err === 'validation false') {
           // 说明输入有报错
-          alert(this.option.text + ' 配置输入有误！')
           this.validation = false
+          return d
         }
         ret.push(d)
       }

@@ -1,4 +1,12 @@
+// 公用的数据结构处理方法（项目逻辑处理方法放在product.js中）
 const fun = {
+  // 数据类型及对应中文描述
+  paramType: {
+    'string': '字符串',
+    'number': '数字',
+    'array': '数组',
+    'object': '对象',
+  },
   mergeObject(source, target) {
     // 合并对象，遇到对象则合并，其他覆盖
     let handler = function (source, target) {

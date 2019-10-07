@@ -19,17 +19,21 @@ const config = {
           default: '', // 默认填充的文本
           validation: 'hs_code',
           description: '股票代码列表', // 介绍说明
-          mustRequired: true // 是否必填
+          mustRequired: false // 是否必填
         }
       ]
     },
     outFunc: [ // 输出的方法，即用于调用外部方法
       {
-        name: 'chooseCode', // 方法名
+        name: 'chooseList', // 方法名
         params: [{ // 可用参数，即可供外部方法使用的参数
           name: 'code', // 参数名称
-          type: 'string', // 数据格式
-          description: '股票代码' // 介绍说明
+          dataType: 'string', // 数据格式（string|number|array|object）
+          description: '选中的股票代码' // 介绍说明
+        }, { // 可用参数，即可供外部方法使用的参数
+          name: 'chooseIndex', // 参数名称
+          dataType: 'number', // 数据格式（string|number|array|object）
+          description: '选中的列表索引' // 介绍说明
         }],
         description: '点击选中股票时可用调用外部的方法' // 介绍说明
       }

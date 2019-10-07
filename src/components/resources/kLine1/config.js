@@ -36,7 +36,7 @@ const config = {
       //   type: 'separator',
       // },
       {
-        key: 'successCode', // 接收的字段名（必传）
+        key: 'mycode', // 接收的字段名（必传）
         type: 'object', // 数据类型（text:纯文本;select:下拉列表;array-text:连续的纯文本框;array-select:连续的下拉列表;array-object:连续输入的复杂数据;object:对象数据）（必传）
         dataType: 'object', // 接收字段的类型（number/string/boolean/object/array-number/array-string/array-boolean/array-object）（必传）
         text: '选股数据', // 显示的选项名称（必传）
@@ -59,7 +59,7 @@ const config = {
             default: '海德股份',
             validation: '',
             description: '股票名称', // 介绍说明
-            mustRequired: true // 是否必填
+            mustRequired: false // 是否必填
           },{
             key: 'time',
             type: 'text',
@@ -68,7 +68,7 @@ const config = {
             default: '2019-02-01',
             validation: 'YYYY-MM-DD',
             description: 'k线图中箭头指向的时间', // 介绍说明
-            mustRequired: true // 是否必填
+            mustRequired: false // 是否必填
           },{
             key: 'top',
             type: 'text',
@@ -77,7 +77,7 @@ const config = {
             default: '自选出以来，涨幅为xxx%',
             validation: '',
             description: '组件顶部的文案', // 介绍说明
-            mustRequired: true // 是否必填
+            mustRequired: false // 是否必填
           }
         ],
         description: '选股数据', // 介绍说明
@@ -95,21 +95,67 @@ const config = {
     description: '股票代码', // 介绍说明
     mustRequired: true // 是否必填
   }],
-  inData: [ // 接收的数据
+  inData: [ // 接收的数据，即可供外部修改的数据（props里的数据）
     {
-      name: 'code', // 接收数据的字段名
-      default: '', // 默认值，即接收值检验出错时使用
-      validation: /^\d{6}$/, // 接收值校验，规则同上方配置项中的数据校验
-      description: '股票代码' // 介绍说明
+      name: 'mycode', // 接收数据的字段名
+      dataType: 'object',
+      description: '选股数据', // 介绍说明
+      objectOptions: [
+        {
+          key: 'code',
+          dataType: 'string',
+          description: '股票代码', // 介绍说明
+          mustRequired: true // 是否必填
+        }, {
+          key: 'name',
+          dataType: 'string',
+          description: '股票名称', // 介绍说明
+          mustRequired: false // 是否必填
+        }, {
+          key: 'time',
+          dataType: 'string',
+          description: 'k线图中箭头指向的时间', // 介绍说明
+          mustRequired: false // 是否必填
+        }, {
+          key: 'top',
+          dataType: 'string',
+          description: '组件顶部的文案', // 介绍说明
+          mustRequired: false // 是否必填
+        }
+      ]
     }
   ],
   inFunc: { // 接收的方法，即可供外部调用的方法
     'changeCode': {
       name: 'changeCode', // 方法名
       params: [{
-        name: 'code', // 参数名
-        description: '股票代码', // 介绍说明
-        mustRequired: true // 是否必填
+        name: 'mycode', // 参数名
+        dataType: 'object', // 参数格式（string|number|array|object）
+        description: '成功案例的数据', // 介绍说明
+        mustRequired: true, // 是否必填
+        objectOptions: [
+          {
+            key: 'code',
+            dataType: 'string',
+            description: '股票代码', // 介绍说明
+            mustRequired: true // 是否必填
+          }, {
+            key: 'name',
+            dataType: 'string',
+            description: '股票名称', // 介绍说明
+            mustRequired: false // 是否必填
+          }, {
+            key: 'time',
+            dataType: 'string',
+            description: 'k线图中箭头指向的时间', // 介绍说明
+            mustRequired: false // 是否必填
+          }, {
+            key: 'top',
+            dataType: 'string',
+            description: '组件顶部的文案', // 介绍说明
+            mustRequired: false // 是否必填
+          }
+        ]
       }], // 方法的参数名
       description: '修改股票代码的时候调动的方法' // 介绍说明
     }

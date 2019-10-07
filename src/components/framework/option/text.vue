@@ -1,10 +1,10 @@
 <!-- 组件配置项的配置UI组件 -->
 <template>
-    <div class="item-option-nav">
+    <div class="item-option-nav" :class="{'vp-mustRequierd': option.mustRequired}">
         <label 
           v-if="option.type == 'text'"
           :title="option.text"
-          :class="{'mustRequired': option.mustRequired}">{{option.text}}：</label>
+          >{{option.text}}：</label>
         <input 
           v-model="inputData"
           :type="option.dataType.indexOf('number') >= 0 ? 'number' : 'text'"
@@ -34,6 +34,10 @@ export default {
   },
   watch: {
     inputData () {
+      if (this.inputData == '') {
+        this.validation = true
+        return
+      }
       if (!this.option.validation) {
         return
       }
@@ -65,6 +69,9 @@ export default {
   },
   methods: {
     optData () {
+      if (this.inputData == '') {
+        return ''
+      }
       if (this.validation) {
         if (this.option.dataType.indexOf('number') >= 0) {
           return parseFloat(this.inputData)
@@ -73,7 +80,7 @@ export default {
         }
       } else {
         // 数据校验不通过统一返回这个
-        return 'validation false'
+        return { err: 'validation false', errmsg: this.option.text + ' 配置输入有误！'}
       }
     }
   }

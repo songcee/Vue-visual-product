@@ -3,9 +3,9 @@
     <div class="title">
         <p class="title-content1">
             <span class="title-name">个股案例</span>
-            <span class="title-stock">{{successCode['code'] + '  ' + successCode['name']}}</span>
+            <span class="title-stock">{{successCode['code'] + '  ' + (successCode['name'] || '')}}</span>
         </p>
-        <p class="title-content2">
+        <p class="title-content2" v-if="successCode.time">
             <span class="title-dsc">{{successCode.time + '选出  ' + (successCode.top ? '，' + successCode.top : '')}}</span>
         </p>
     </div>
@@ -16,9 +16,10 @@
 import axios from "axios";
 export default {
   name: "kLinePopup",
-  props:['successCode'],
+  props:['mycode'],
   data(){
     return{
+      successCode: {},
       chart:void 0,
       interval: void 0,
       bottomLine: 0,
@@ -29,6 +30,11 @@ export default {
     }
   },
   watch: {
+    mycode(val,oldval){
+      if(val['code']){
+        this.successCode = val
+      }
+    },
     successCode(val,oldval){
       if(val['code']){
         this.getZhibiao()
@@ -65,11 +71,17 @@ export default {
             }
         }
     },
+    changeCode (data) {
+      console.log(data)
+      if(data['code']){
+        this.successCode = data
+      }
+    },
     getZhibiao(){
       const s = this
       let param = {
         code:this.successCode['code'],
-        date: this.successCode['time'].replace(/-/g,'')
+        date: this.successCode['time'] ? this.successCode['time'].replace(/-/g,'') : undefined
       }
       this.axiosGet(param)
       .then(({ data } = {}) => {
@@ -187,7 +199,7 @@ export default {
         var filterNum = D3Charts.hqHelper.filterNum;
 
         var code = 'hs_' + this.successCode['code'];
-        var day = this.successCode['time'].replace(/-/g,'')
+        var day = this.successCode['time'] ? this.successCode['time'].replace(/-/g,'') : -1
 
         var color = {
             axisLine: '#2e2e2e',
@@ -960,10 +972,11 @@ export default {
                 }
             })
         });
-  },
+    },
   },
   mounted() {
     const s = this
+    this.successCode = this.mycode
     this.chart = D3Charts.init("KlinePopchart");
     // this.starChart()
     this.getZhibiao()

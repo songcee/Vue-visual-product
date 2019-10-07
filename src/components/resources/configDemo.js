@@ -124,7 +124,7 @@ const config = {
     {
       name: 'zdf', // 输出数据的字段名
       description: '个股的涨跌幅', // 字段描述，用于调用者阅读理解
-      type: 'string' // 数据类型
+      dataType: 'string' // 数据类型
     }
   ],
   inFunc: { // 接收的方法，即可供外部调用的方法
@@ -132,8 +132,42 @@ const config = {
       name: 'changeCode', // 方法名
       params: [{
         name: 'code', // 参数名
+        dataType: 'string', // 参数格式（string|number|array|object）
         description: '股票代码', // 介绍说明
         mustRequired: true // 是否必填
+      }], // 方法的参数名
+      description: '修改股票代码的时候调动的方法' // 介绍说明
+    },
+    'changeCode2': {
+      name: 'changeCode2', // 方法名
+      params: [{
+        name: 'successCode', // 参数名
+        dataType: 'object', // 参数格式（string|number|array|object）
+        description: '成功案例的数据', // 介绍说明
+        mustRequired: true, // 是否必填
+        objectOptions: [
+          {
+            key: 'code',
+            dataType: 'string',
+            description: '股票代码', // 介绍说明
+            mustRequired: true // 是否必填
+          }, {
+            key: 'name',
+            dataType: 'string',
+            description: '股票名称', // 介绍说明
+            mustRequired: true // 是否必填
+          }, {
+            key: 'time',
+            dataType: 'string',
+            description: 'k线图中箭头指向的时间', // 介绍说明
+            mustRequired: false // 是否必填
+          }, {
+            key: 'top',
+            dataType: 'string',
+            description: '组件顶部的文案', // 介绍说明
+            mustRequired: false // 是否必填
+          }
+        ]
       }], // 方法的参数名
       description: '修改股票代码的时候调动的方法' // 介绍说明
     }
@@ -143,7 +177,7 @@ const config = {
       name: 'dblclick', // 方法名
       params: [{ // 可用参数，即可供外部方法使用的参数
         name: 'code', // 参数名称
-        type: 'string', // 数据格式
+        dataType: 'string', // 数据格式（string|number|array|object）
         description: '股票代码' // 介绍说明
       }],
       description: '双击股票名称时会调用这个方法' // 介绍说明

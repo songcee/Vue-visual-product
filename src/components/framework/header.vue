@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    handlerExpend () {
+    handlerExpend () { // 模块收缩、展开控制
       return this.$store.state.handler.allExpend;
     },
     productName () {

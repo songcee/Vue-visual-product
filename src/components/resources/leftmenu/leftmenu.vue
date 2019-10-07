@@ -5,7 +5,7 @@
       v-for="(v, i) in listData"
       :key="i"
       :class="{'choose': chooseIndex == i}"
-      @click="chooseList(i)">{{v}}</li>
+      @click="chooseList(i, v)">{{v}}</li>
   </ul>
 </template>
 
@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       chooseIndex: -1,
+      code: -1
     };
   },
   mounted () {
@@ -27,8 +28,9 @@ export default {
   watch: {
   },
   methods: {
-    chooseList (i) {
+    chooseList (i, v) {
       this.chooseIndex = i
+      this.code = v
     }
   }
 };
