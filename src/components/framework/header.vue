@@ -6,6 +6,7 @@
         <button type="button" class="vp-btn vp-btn-red" v-if="isNewProduct" @click="productEdit()">新建项目</button>
         <button type="button" class="vp-btn" v-else @click="productEdit()">编辑项目</button>
         <button type="button" class="vp-btn" @click="moduleEdit()">模块划分</button>
+        <button type="button" class="vp-btn" @click="download()">下载代码</button>
         <button type="button" class="vp-btn">预览页面</button>
         <button type="button" class="vp-btn">版本管理</button>
       </div>
@@ -61,6 +62,10 @@ export default {
       }
       this.$store.commit('module_show')
       this.$store.commit('popup_topmask_handler', true)
+    },
+    // 下载代码
+    download () {
+      
     },
     // 控制面板的收起和展开
     toggleHandler (type) {
