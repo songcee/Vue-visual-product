@@ -7,8 +7,8 @@
         <button type="button" class="vp-btn" v-else @click="productEdit()">编辑项目</button>
         <button type="button" class="vp-btn" @click="moduleEdit()">模块划分</button>
         <button type="button" class="vp-btn" @click="download()">下载代码</button>
-        <button type="button" class="vp-btn">预览页面</button>
-        <button type="button" class="vp-btn">版本管理</button>
+        <!-- <button type="button" class="vp-btn">预览页面</button>
+        <button type="button" class="vp-btn">版本管理</button> -->
       </div>
     </div>
     <div class="handler handler-header" @click="toggleHandler()"></div>
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import tpl from './template'
 export default {
   name: 'Header',
   created: function () {
@@ -65,7 +66,17 @@ export default {
     },
     // 下载代码
     download () {
-      
+      if (!this.productName) {
+        alert('请先创建项目！')
+        return
+      }
+      // 第一步：获取页面整体布局方式
+      let layout = this.$store.state.product.layout
+      // 第二步：获取页面模块划分
+      let modules = this.$store.state.product.modules
+      // 第三步：获取每个模块中的组件名称
+      let components = this.$store.state.product.components
+      tpl.download({layout, modules, components})
     },
     // 控制面板的收起和展开
     toggleHandler (type) {
