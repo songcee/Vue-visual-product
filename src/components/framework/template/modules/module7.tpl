@@ -26,15 +26,15 @@ export default {
   right: 0;
   border-bottom: 1px solid #000;
   overflow: hidden;
-  height: <%= formate.input1 %>px;
+  height: <%= modules.input1 %>px;
 }
 .module-middle {
   position: absolute;
   left: 0;
   right: 0;
   overflow: hidden;
-  top: <%= Number(formate.input1) + 1 %>px;
-  bottom: <%= Number(formate.input2) + 1 %>px;
+  top: <%= Number(modules.input1) + 1 %>px;
+  bottom: <%= Number(modules.input2) + 1 %>px;
 }
 .module-middle-left {
   height: 100%;
@@ -44,7 +44,7 @@ export default {
   left: 0;
   top: 0;
   overflow: hidden;
-  width: <%= formate.input3 %>px;
+  width: <%= modules.input3 %>px;
 }
 .module-middle-right {
   height: 100%;
@@ -52,7 +52,7 @@ export default {
   right: 0;
   top: 0;
   overflow: hidden;
-  left: <%= formate.input3 %>px;
+  left: <%= modules.input3 %>px;
 }
 .module-bottom {
   position: absolute;
@@ -61,7 +61,7 @@ export default {
   right: 0;
   border-top: 1px solid #000;
   overflow: hidden;
-  height: <%= formate.input2 %>px;
+  height: <%= modules.input2 %>px;
 }
 </style>
 `

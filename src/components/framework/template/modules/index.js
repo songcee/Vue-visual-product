@@ -13,5 +13,5 @@ let modules = {
  module12Tpl : require('./module12.tpl'),
 }
 export default  (i) => {
-  return modules[`module${i}Tpl`].default
+  return '<!-- 布局划分页面 -->'+modules[`module${i}Tpl`].default
 }

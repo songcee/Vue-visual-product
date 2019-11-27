@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-easy-toast": "^1.0.5",
+    "vue-underscore": "^0.1.4",
     "vuex": "^3.1.1"
   },
   "devDependencies": {

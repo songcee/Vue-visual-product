@@ -1,13 +1,13 @@
 export default `
 <template>
   <div class="module-container">
-    <div class="module-top" :style="{height: formate.input1 + 'px'}"></div>
-    <div class="module-middle" :style="{top: Number(formate.input1) + 1 + 'px', bottom: Number(formate.input2) + 1 + 'px'}">
-      <div class="module-middle-left" :style="{width: formate.input3 + 'px'}"></div>
-      <div class="module-middle-middle" :style="{left: Number(formate.input3) + 1 + 'px', right: Number(formate.input4) + 1 + 'px'}"></div>
-      <div class="module-middle-right" :style="{width: formate.input4 + 'px'}"></div>
+    <div class="module-top"></div>
+    <div class="module-middle">
+      <div class="module-middle-left"></div>
+      <div class="module-middle-middle"></div>
+      <div class="module-middle-right"></div>
     </div>
-    <div class="module-bottom" :style="{height: formate.input2 + 'px'}"></div>
+    <div class="module-bottom"></div>
   </div>
 </template>
 <script>
@@ -27,12 +27,15 @@ export default {
   right: 0;
   border-bottom: 1px solid #000;
   overflow: hidden;
+  height: <%= modules.input1 %>px;
 }
 .module-middle {
   position: absolute;
   left: 0;
   right: 0;
   overflow: hidden;
+  top: <%= Number(modules.input1) + 1 %>px;
+  bottom: <%= Number(modules.input2) + 1 %>px;
 }
 .module-middle-left {
   border-right: 1px solid #000;
@@ -41,12 +44,15 @@ export default {
   left: 0;
   top: 0;
   height: 100%;
+  width: <%= modules.input3 %>px;
 }
 .module-middle-middle {
   overflow: hidden;
   position: absolute;
   top: 0;
   height: 100%;
+  left: <%= Number(modules.input3) + 1 %>px;
+  right: <%= Number(modules.input4) + 1 %>px;
 }
 .module-middle-right {
   border-left: 1px solid #000;
@@ -55,6 +61,7 @@ export default {
   right: 0;
   top: 0;
   height: 100%;
+  width: <%= modules.input4 %>px;
 }
 .module-bottom {
   position: absolute;
@@ -63,6 +70,7 @@ export default {
   right: 0;
   border-top: 1px solid #000;
   overflow: hidden;
+  height: <%= modules.input2 %>px;
 }
 </style>
 `
