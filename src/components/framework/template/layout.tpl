@@ -22,13 +22,15 @@ export default {
 <style>
 html, body {
   background: <%= layout.bgcolor %>;
+  width: 100%;
+  height: 100%;
 }
 .body {
   margin: 0 auto;
   position: relative;
   <% switch (layout.width_adaption) { 
     case '1': %>
-  width: 100px;
+  width: 100%;
   min-width: <%= layout.adaption.minWidth %>px;
   <% break;
     case '2': %>
